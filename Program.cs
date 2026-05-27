@@ -11,6 +11,8 @@ public class Program
 {
     public static void Main()
     {
+        const string WRITE_PATH = "./history.txt";
+
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
@@ -23,6 +25,18 @@ public class Program
         Console.WriteLine();
 
         string result = DetermineWinner(playerChoice, computerChoice);
+
+        try
+        {
+            using (StreamWriter sw = new StreamWriter(WRITE_PATH, append: true))
+            {
+                sw.WriteLine($"Timestamp: {System.DateTime.Now}, Player Choice: {playerChoice}, Computer Choice: {computerChoice}, Result: {result}");
+            }
+        }
+        catch (Exception ex) 
+        { 
+            Console.WriteLine($"{ex.Message}");
+        }
         Console.WriteLine(result);
     }
 
