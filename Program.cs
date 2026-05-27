@@ -53,11 +53,11 @@ public class Program
         }
 
         bool playerWins =
-            (player == "rock" && computer == "scissors" || computer == "lizard") ||
-            (player == "paper" && computer == "rock" || computer == "spock") ||
-            (player == "scissors" && computer == "paper" || computer == "lizard") ||
-            (player == "lizard" && computer == "paper" || computer == "spock") ||
-            (player == "spock" && computer == "rock" || computer == "scissors");
+            (player == "rock" && (computer == "scissors" || computer == "lizard")) ||
+            (player == "paper" && (computer == "rock" || computer == "spock")) ||
+            (player == "scissors" && (computer == "paper" || computer == "lizard")) ||
+            (player == "lizard" && (computer == "paper" || computer == "spock")) ||
+            (player == "spock" && (computer == "rock" || computer == "scissors"));
 
         return playerWins ? "You win!" : "Computer wins!";
     }
