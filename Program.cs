@@ -6,11 +6,15 @@
 // Pick a feature from the README and go.
 
 namespace RpsWorkshop;
+using System.IO;
 
 public class Program
 {
     public static void Main()
     {
+        string filepath = "history.txt";
+        string time = DateTime.Now.ToString();
+
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
@@ -18,8 +22,12 @@ public class Program
         string computerChoice = GetComputerChoice();
 
         Console.WriteLine();
+
+        File.AppendAllText(filepath, time + " ");
         Console.WriteLine($"You played:      {playerChoice}");
+        File.AppendAllText(filepath, "You Played: " + playerChoice);
         Console.WriteLine($"Computer played: {computerChoice}");
+        File.AppendAllText(filepath, ", Computer Played: " +  computerChoice + "\n");
         Console.WriteLine();
 
         string result = DetermineWinner(playerChoice, computerChoice);
