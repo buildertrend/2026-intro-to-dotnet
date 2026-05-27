@@ -27,12 +27,20 @@ public class Program
     }
 
     // Prompts the player and returns their choice as a lowercase string.
-    // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors): ");
-        string input = Console.ReadLine() ?? "";
-        return input.Trim().ToLower();
+        while (true)
+        {
+            Console.Write("Enter your choice (rock, paper, scissors): ");
+            string input = Console.ReadLine() ?? "";
+
+            input.Trim().ToLower();
+            List<string> choices = new List<string> { "rock", "paper", "scissors" };
+            if (choices.Contains(input))
+            {
+                return input;
+            }
+        }
     }
 
     // Picks rock, paper, or scissors at random for the computer.
