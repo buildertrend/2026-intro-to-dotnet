@@ -51,18 +51,8 @@ public class Program
         {
             return "It's a tie!";
         }
-        /*
-        - Scissors cuts Paper
-        - Paper covers Rock
-        - Rock crushes Lizard
-        - Lizard poisons Spock
-        - Spock smashes Scissors
-        - Scissors decapitates Lizard
-        - Lizard eats Paper
-        - Paper disproves Spock
-        - Spock vaporizes Rock
-        - Rock crushes Scissors
-         */
+
+        // win choice decision for rock paper scissors lizard spock
         bool playerWins =
             (player == "rock" && (computer == "scissors" || computer == "lizard")) ||
             (player == "paper" && computer == "rock" || computer == "spock") ||
@@ -71,6 +61,7 @@ public class Program
             (player == "spock" && (computer == "scissors" || computer == "rock"))
             ;
 
+        if (playerWins && )
 
         return playerWins ? "You win!" : "Computer wins!";
     }
