@@ -5,7 +5,16 @@
 //
 // Pick a feature from the README and go.
 
+using System.Data.SqlTypes;
+
 namespace RpsWorkshop;
+
+enum Choice
+{
+    Rock,
+    Paper,
+    Scissors
+}
 
 public class Program
 {
@@ -14,8 +23,8 @@ public class Program
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice();
+        Choice playerChoice = GetPlayerChoice();
+        Choice computerChoice = GetComputerChoice();
 
         Console.WriteLine();
         Console.WriteLine($"You played:      {playerChoice}");
@@ -28,24 +37,29 @@ public class Program
 
     // Prompts the player and returns their choice as a lowercase string.
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
-    private static string GetPlayerChoice()
+    private static Choice GetPlayerChoice()
     {
         Console.Write("Enter your choice (rock, paper, scissors): ");
         string input = Console.ReadLine() ?? "";
-        return input.Trim().ToLower();
+        string trimmed = input.Trim().ToLower();
+        if (Enum.TryParse<Choice>(trimmed, ignoreCase: true, out Choice choice))
+        {
+            return choice;
+        }
+        Console.WriteLine("Invalid choice. Defaulting to rock.");
+        return Choice.Rock; // Default to rock if input is invalid. 
     }
 
     // Picks rock, paper, or scissors at random for the computer.
-    private static string GetComputerChoice()
+    private static Choice GetComputerChoice()
     {
-        string[] choices = { "rock", "paper", "scissors" };
         Random random = new Random();
-        int index = random.Next(choices.Length);
-        return choices[index];
+        int index = random.Next(Enum.GetValues(typeof(Choice)).Length);
+        return (Choice)index;
     }
 
     // Returns a string describing who won this round.
-    private static string DetermineWinner(string player, string computer)
+    private static string DetermineWinner(Choice player, Choice computer)
     {
         if (player == computer)
         {
@@ -53,9 +67,9 @@ public class Program
         }
 
         bool playerWins =
-            (player == "rock" && computer == "scissors") ||
-            (player == "paper" && computer == "rock") ||
-            (player == "scissors" && computer == "paper");
+            (player == Choice.Rock && computer == Choice.Scissors) ||
+            (player == Choice.Paper && computer == Choice.Rock) ||
+            (player == Choice.Scissors && computer == Choice.Paper);
 
         return playerWins ? "You win!" : "Computer wins!";
     }
