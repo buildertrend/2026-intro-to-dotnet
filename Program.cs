@@ -32,7 +32,7 @@ public class Program
 
         string result = DetermineWinner(playerChoice, computerChoice);
         Console.WriteLine(result);
-        File.AppendAllText(filepath, ", Result: " + result);
+        File.AppendAllText(filepath, ", Result: " + result + "\n");
     }
 
     // Prompts the player and returns their choice as a lowercase string.
