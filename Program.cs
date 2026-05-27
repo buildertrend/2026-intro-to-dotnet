@@ -40,10 +40,6 @@ public class Program
     {
         Console.Write("Enter your choice (rock, paper, scissors): ");
         string input = Console.ReadLine() ?? "";
-        if(input != "rock" || input != "paper" || input != "scissors")
-        {
-            string text = $"The choice {input} is not valid";            return text;
-        }
         return input.Trim().ToLower();
     }
 
