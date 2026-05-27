@@ -5,6 +5,8 @@
 //
 // Pick a feature from the README and go.
 
+using System.Runtime.Versioning;
+
 namespace RpsWorkshop;
 
 public class Program
@@ -30,7 +32,7 @@ public class Program
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors): ");
+        Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
         string input = Console.ReadLine() ?? "";
 
         bool valid = false;
@@ -38,14 +40,14 @@ public class Program
 
         while (valid == false) {
 
-            if ( input == "paper" || input == "scissors" || input == "rock" )
+            if ( input == "paper" || input == "scissors" || input == "rock" || input == "lizard" || input == "spock" )
             {
                 valid = true;
                 return input.Trim().ToLower();
             }
 
             Console.Write("That's not an option, silly! Try again. ");
-            Console.Write("Enter your choice (rock, paper, scissors): ");
+            Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
             input = Console.ReadLine() ?? "";
             input.Trim().ToLower();
         }
@@ -56,7 +58,7 @@ public class Program
     // Picks rock, paper, or scissors at random for the computer.
     private static string GetComputerChoice()
     {
-        string[] choices = { "rock", "paper", "scissors" };
+        string[] choices = { "rock", "paper", "scissors", "lizard", "spock" };
         Random random = new Random();
         int index = random.Next(choices.Length);
         return choices[index];
@@ -73,7 +75,14 @@ public class Program
         bool playerWins =
             (player == "rock" && computer == "scissors") ||
             (player == "paper" && computer == "rock") ||
-            (player == "scissors" && computer == "paper");
+            (player == "scissors" && computer == "paper") ||
+            (player == "rock" && computer == "lizard") ||
+            (player == "lizard" && computer == "spock") ||
+            (player == "spock" && computer == "scissors") ||
+            (player == "scissors" && computer == "lizard") ||
+            (player == "lizard" && computer == "paper") ||
+            (player == "paper" && computer == "spock") ||
+            (player == "spock" && computer == "rock");
 
         return playerWins ? "You win!" : "Computer wins!";
     }
