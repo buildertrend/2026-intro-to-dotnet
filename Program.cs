@@ -16,9 +16,9 @@ public class Program
     public static void Main()
     {
         Console.WriteLine("===First to 3 Wins===");
+        Console.WriteLine("=== Rock Paper Scissors ===");
         while (wins < 3 && losses < 3)
         {
-            Console.WriteLine("=== Rock Paper Scissors ===");
             Console.WriteLine();
 
             string playerChoice = GetPlayerChoice();
