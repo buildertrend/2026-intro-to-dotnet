@@ -14,11 +14,12 @@ public class Program
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
-        string playerChoice = string.Empty;
-        while (!ValidateChoice(playerChoice))
+        string playerChoice = GetPlayerChoice();
+        if (playerChoice == "rock" || playerChoice == "paper" || playerChoice =="scissors")
         {
-            playerChoice = GetPlayerChoice();
-        } 
+            
+            
+        
         string computerChoice = GetComputerChoice();
 
         Console.WriteLine();
@@ -27,7 +28,22 @@ public class Program
         Console.WriteLine();
 
         string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+        Console.WriteLine(result);}
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter rock, paper, or scissors.");
+        }
+        Console.WriteLine("Continue? (y/n)");
+        string cont = Console.ReadLine() ?? "";
+        if (cont.ToLower() == "y" )
+        {
+            Main();
+
+        }else if (cont.ToLower() == "n")
+        {
+            Console.WriteLine("Thanks for playing!");
+            
+        }
     }
 
     // Prompts the player and returns their choice as a lowercase string.
