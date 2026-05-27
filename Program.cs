@@ -7,11 +7,25 @@
 
 namespace RpsWorkshop;
 
+enum GameOutcome
+{
+    PlayerWin,
+    ComputerWin,
+    Tie,
+}
+
 public class Program
 {
     public static void Main()
     {
         Console.WriteLine("=== Rock Paper Scissors ===");
+
+        List<GameOutcome> history = LoadGameOutcomes();
+        int wins = history.Where(o => o == GameOutcome.PlayerWin).Count();
+        int losses = history.Where(o => o == GameOutcome.ComputerWin).Count();
+        int ties = history.Where(o => o == GameOutcome.Tie).Count();
+        Console.Write($"Wins: {wins}, Losses: {losses}, Ties: {ties}");
+
         Console.WriteLine();
 
         string playerChoice = GetPlayerChoice();
@@ -22,7 +36,15 @@ public class Program
         Console.WriteLine($"Computer played: {computerChoice}");
         Console.WriteLine();
 
-        string result = DetermineWinner(playerChoice, computerChoice);
+        GameOutcome outcome = DetermineWinner(playerChoice, computerChoice);
+        SaveGameOutcome(outcome);
+        string result = outcome switch
+        {
+            GameOutcome.PlayerWin => "You win!",
+            GameOutcome.ComputerWin => "Computer wins.",
+            GameOutcome.Tie => "It's a tie!",
+            _ => "The programmer is stupid."
+        };
         Console.WriteLine(result);
     }
 
@@ -53,11 +75,11 @@ public class Program
     }
 
     // Returns a string describing who won this round.
-    private static string DetermineWinner(string player, string computer)
+    private static GameOutcome DetermineWinner(string player, string computer)
     {
         if (player == computer)
         {
-            return "It's a tie!";
+            return GameOutcome.Tie;
         }
 
         bool playerWins =
@@ -65,6 +87,26 @@ public class Program
             (player == "paper" && computer == "rock") ||
             (player == "scissors" && computer == "paper");
 
-        return playerWins ? "You win!" : "Computer wins!";
+        return playerWins ? GameOutcome.PlayerWin : GameOutcome.ComputerWin;
+    }
+
+    private static void SaveGameOutcome(GameOutcome outcome)
+    {
+        File.AppendAllText("history.txt", outcome.ToString() + "\n");
+    }
+
+    private static List<GameOutcome> LoadGameOutcomes()
+    {
+        List<string> file = File.ReadAllLines("history.txt").ToList();
+
+        List<GameOutcome> history = file.Select(o => o switch
+        {
+            "PlayerWin" => GameOutcome.PlayerWin,
+            "ComputerWin" => GameOutcome.ComputerWin,
+            "Tie" => GameOutcome.Tie,
+            _ => GameOutcome.Tie,
+        }).ToList();
+
+        return history;
     }
 }
