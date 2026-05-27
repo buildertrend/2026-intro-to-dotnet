@@ -36,11 +36,11 @@ public class Program
         }
         if(losses >= 3)
         {
-            Console.WriteLine("Computer Wins!");
+            Console.WriteLine("Game Over, Computer Wins!");
         }
         else
         {
-            Console.WriteLine("You Win!");
+            Console.WriteLine("Game Over, You Win!");
         }
     }
 
