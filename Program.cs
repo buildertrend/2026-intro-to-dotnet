@@ -5,6 +5,9 @@
 //
 // Pick a feature from the README and go.
 
+using System.CommandLine;
+using System.CommandLine.Parsing;
+
 namespace RpsWorkshop;
 
 enum GameOutcome
@@ -16,8 +19,23 @@ enum GameOutcome
 
 public class Program
 {
-    public static void Main()
+    public static void Main(string[] args)
     {
+        bool cheatEnabled = false;
+        Option<bool> cheatOption = new("--cheat")
+        {
+            Description = "Let the computer cheat and always win"
+        };
+
+        RootCommand rootCommand = new("RPS Game");
+        rootCommand.Options.Add(cheatOption);
+
+        ParseResult parseResult = rootCommand.Parse(args);
+        if (parseResult.Errors.Count == 0)
+        {
+            cheatEnabled = true;
+        }
+
         Console.WriteLine("=== Rock Paper Scissors ===");
 
         List<GameOutcome> history = LoadGameOutcomes();
@@ -29,7 +47,7 @@ public class Program
         Console.WriteLine();
 
         string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice();
+        string computerChoice = GetComputerChoice(cheatEnabled, playerChoice);
 
         Console.WriteLine();
         Console.WriteLine($"You played:      {playerChoice}");
@@ -66,12 +84,28 @@ public class Program
     }
 
     // Picks rock, paper, or scissors at random for the computer.
-    private static string GetComputerChoice()
+    private static string GetComputerChoice(bool cheatEnabled, string playerChoice)
     {
-        string[] choices = { "rock", "paper", "scissors" };
-        Random random = new Random();
-        int index = random.Next(choices.Length);
-        return choices[index];
+        string choice = "";
+        if (cheatEnabled)
+        {
+            choice = playerChoice switch
+            {
+                "rock" => "paper",
+                "paper" => "scissors",
+                "scissors" => "rock",
+                _ => "paper",
+            };
+        }
+        else
+        {
+            string[] choices = { "rock", "paper", "scissors" };
+            Random random = new Random();
+            int index = random.Next(choices.Length);
+            choice = choices[index];
+        }
+
+        return choice;
     }
 
     // Returns a string describing who won this round.
