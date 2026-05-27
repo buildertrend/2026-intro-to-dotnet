@@ -18,7 +18,11 @@ public class Program
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
+        string playerChoice = string.Empty;
+        while (!ValidateChoice(playerChoice))
+        {
+            playerChoice = GetPlayerChoice();
+        } 
         string computerChoice = GetComputerChoice();
 
         Console.WriteLine();
@@ -51,6 +55,17 @@ public class Program
         Random random = new Random();
         int index = random.Next(choices.Length);
         return choices[index];
+    }
+
+    private static bool ValidateChoice(string input)
+    {
+        if (input == "rock" || input == "paper" || input == "scissors")
+        {
+            return true;
+        }
+        Console.WriteLine("Please ensure your choice is spelled correctly with no extra symbols.");
+        return false;
+        
     }
 
     // Returns a string describing who won this round.
