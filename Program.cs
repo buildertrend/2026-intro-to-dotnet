@@ -9,21 +9,39 @@ namespace RpsWorkshop;
 
 public class Program
 {
+    static int wins=0;
+    static int losses=0;
+    static int ties=0;
+
     public static void Main()
     {
-        Console.WriteLine("=== Rock Paper Scissors ===");
-        Console.WriteLine();
+        Console.WriteLine("===First to 3 Wins===");
+        while (wins < 3 && losses < 3)
+        {
+            Console.WriteLine("=== Rock Paper Scissors ===");
+            Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice();
+            string playerChoice = GetPlayerChoice();
+            string computerChoice = GetComputerChoice();
 
-        Console.WriteLine();
-        Console.WriteLine($"You played:      {playerChoice}");
-        Console.WriteLine($"Computer played: {computerChoice}");
-        Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine($"You played:      {playerChoice}");
+            Console.WriteLine($"Computer played: {computerChoice}");
+            Console.WriteLine();
 
-        string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+            string result = DetermineWinner(playerChoice, computerChoice);
+            Console.WriteLine(result);
+            string score = getWLT();
+            Console.WriteLine(score);
+        }
+        if(losses >= 3)
+        {
+            Console.WriteLine("Computer Wins!");
+        }
+        else
+        {
+            Console.WriteLine("You Win!");
+        }
     }
 
     // Prompts the player and returns their choice as a lowercase string.
@@ -49,7 +67,8 @@ public class Program
     {
         if (player == computer)
         {
-            return "It's a tie!";
+            ties++;
+            return "It's a tie!"; 
         }
 
         bool playerWins =
@@ -57,6 +76,21 @@ public class Program
             (player == "paper" && computer == "rock") ||
             (player == "scissors" && computer == "paper");
 
-        return playerWins ? "You win!" : "Computer wins!";
+        if (playerWins)
+        {
+            wins++;
+        }
+        else
+        {
+            losses++;
+        }
+            return playerWins ? "You win!" : "Computer wins!";
     }
+
+    private static string getWLT()
+    {
+
+        return $"Score: [Wins: {wins}]  [Losses: {losses}] [Ties: {ties}]";
+    }
+
 }
