@@ -32,15 +32,29 @@ public class Program
             Console.WriteLine($"The choice {playerChoice} is not valid");
         }
     }
-    
+
+    private static bool IsValidChoice(string validChoice)
+    {
+        return validChoice == "rock" || validChoice =="scissors" || validChoice == "paper";
+    }
 
     // Prompts the player and returns their choice as a lowercase string.
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors): ");
-        string input = Console.ReadLine() ?? "";
-        return input.Trim().ToLower();
+        while(true)
+        {
+            Console.Write("Enter your choice (rock, paper, scissors): ");
+            string input = Console.ReadLine() ?? "";
+            input = input.Trim().ToLower();
+            if (IsValidChoice(input))
+            {
+                return input;
+            }
+            Console.WriteLine("Invalid choice. Please try again.....");
+        }
+    }
+
     }
 
     // Picks rock, paper, or scissors at random for the computer.
