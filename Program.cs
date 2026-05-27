@@ -30,9 +30,29 @@ public class Program
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors): ");
-        string input = Console.ReadLine() ?? "";
-        return input.Trim().ToLower();
+        var reprompt = true;
+        string input = "";
+        while (reprompt) {
+            Console.Write("Enter your choice (rock, paper, scissors): ");
+            input = Console.ReadLine() ?? "";
+            if (!string.IsNullOrEmpty(input))
+            {
+                input = input.Trim().ToLower();
+                if (input == "rock" || input == "paper" || input == "scissors")
+                {
+                    reprompt = false;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Syntax. Try Again.");
+                }
+            }
+            else 
+            {
+                Console.WriteLine("Please Enter Input.");
+            }
+        }
+        return input;
     }
 
     // Picks rock, paper, or scissors at random for the computer.
