@@ -15,16 +15,24 @@ public class Program
         Console.WriteLine();
 
         string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice();
+        if(playerChoice == "rock" || playerChoice == "paper" || playerChoice == "scissors")
+        {
+            string computerChoice = GetComputerChoice();
 
-        Console.WriteLine();
-        Console.WriteLine($"You played:      {playerChoice}");
-        Console.WriteLine($"Computer played: {computerChoice}");
-        Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine($"You played:      {playerChoice}");
+            Console.WriteLine($"Computer played: {computerChoice}");
+            Console.WriteLine();
 
-        string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+            string result = DetermineWinner(playerChoice, computerChoice);
+            Console.WriteLine(result);
+        }
+        else
+        {
+            Console.WriteLine($"The choice {playerChoice} is not valid");
+        }
     }
+    
 
     // Prompts the player and returns their choice as a lowercase string.
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
@@ -32,6 +40,10 @@ public class Program
     {
         Console.Write("Enter your choice (rock, paper, scissors): ");
         string input = Console.ReadLine() ?? "";
+        if(input != "rock" || input != "paper" || input != "scissors")
+        {
+            string text = $"The choice {input} is not valid";            return text;
+        }
         return input.Trim().ToLower();
     }
 
