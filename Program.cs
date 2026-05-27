@@ -11,7 +11,7 @@ public class Program
 {
     public static void Main()
     {
-        Console.WriteLine("=== Rock Paper Scissors ===");
+        Console.WriteLine("=== Rock Paper Scissors Lizard Spock ===");
         Console.WriteLine();
 
         string playerChoice = GetPlayerChoice();
@@ -30,15 +30,15 @@ public class Program
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors): ");
+        Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
         string input = Console.ReadLine() ?? "";
         return input.Trim().ToLower();
     }
 
-    // Picks rock, paper, or scissors at random for the computer.
+    // Picks rock, paper, scissors, lizard, or spock at random for the computer.
     private static string GetComputerChoice()
     {
-        string[] choices = { "rock", "paper", "scissors" };
+        string[] choices = { "rock", "paper", "scissors", "lizard", "spock" };
         Random random = new Random();
         int index = random.Next(choices.Length);
         return choices[index];
@@ -53,9 +53,11 @@ public class Program
         }
 
         bool playerWins =
-            (player == "rock" && computer == "scissors") ||
-            (player == "paper" && computer == "rock") ||
-            (player == "scissors" && computer == "paper");
+            (player == "rock" && computer == "scissors" || computer == "lizard") ||
+            (player == "paper" && computer == "rock" || computer == "spock") ||
+            (player == "scissors" && computer == "paper" || computer == "lizard") ||
+            (player == "lizard" && computer == "paper" || computer == "spock") ||
+            (player == "spock" && computer == "rock" || computer == "scissors");
 
         return playerWins ? "You win!" : "Computer wins!";
     }
