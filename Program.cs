@@ -27,11 +27,12 @@ public class Program
         Console.WriteLine($"You played:      {playerChoice}");
         File.AppendAllText(filepath, "You Played: " + playerChoice);
         Console.WriteLine($"Computer played: {computerChoice}");
-        File.AppendAllText(filepath, ", Computer Played: " +  computerChoice + "\n");
+        File.AppendAllText(filepath, ", Computer Played: " +  computerChoice);
         Console.WriteLine();
 
         string result = DetermineWinner(playerChoice, computerChoice);
         Console.WriteLine(result);
+        File.AppendAllText(filepath, ", Result: " + result);
     }
 
     // Prompts the player and returns their choice as a lowercase string.
