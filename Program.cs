@@ -35,10 +35,13 @@ public class Program
             Console.Write("Enter your choice (rock, paper, scissors): ");
             string input = Console.ReadLine() ?? "";
 
+            input = input.Trim().ToLower();
+
             if (input == "rock" || input == "paper" || input == "scissors")
             {
                 return input.Trim().ToLower();
             }
+            Console.Write("Please input a valid choice. Your choices are 'rock', 'paper', or 'scissors'.");
         }
     }
 
