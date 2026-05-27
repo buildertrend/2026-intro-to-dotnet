@@ -61,7 +61,6 @@ public class Program
             (player == "spock" && (computer == "scissors" || computer == "rock"))
             ;
 
-        if (playerWins && )
 
         return playerWins ? "You win!" : "Computer wins!";
     }
