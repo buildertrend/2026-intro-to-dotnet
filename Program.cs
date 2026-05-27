@@ -97,7 +97,15 @@ public class Program
 
     private static List<GameOutcome> LoadGameOutcomes()
     {
-        List<string> file = File.ReadAllLines("history.txt").ToList();
+        List<string> file;
+        try
+        {
+            file = File.ReadAllLines("history.txt").ToList();
+        }
+        catch (FileNotFoundException)
+        {
+            file = new List<string> { "" };
+        }
 
         List<GameOutcome> history = file.Select(o => o switch
         {
