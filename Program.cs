@@ -64,6 +64,17 @@ public class Program
         return choices[index];
     }
 
+    private static bool ValidateChoice(string input)
+    {
+        if (input == "rock" || input == "paper" || input == "scissors")
+        {
+            return true;
+        }
+        Console.WriteLine("Please ensure your choice is spelled correctly with no extra symbols.");
+        return false;
+        
+    }
+
     // Returns a string describing who won this round.
     private static string DetermineWinner(string player, string computer)
     {
