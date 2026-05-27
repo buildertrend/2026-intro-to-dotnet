@@ -10,20 +10,30 @@ namespace RpsWorkshop;
 public class Program
 {
     public static void Main()
-    {
+    {   
+        int gamecount = 0;
+        List<int> wintielost = new List<int> { 0, 0, 0 };
+        while(gamecount < 7){
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
         string playerChoice = GetPlayerChoice();
         string computerChoice = GetComputerChoice();
-
         Console.WriteLine();
         Console.WriteLine($"You played:      {playerChoice}");
         Console.WriteLine($"Computer played: {computerChoice}");
         Console.WriteLine();
-
         string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+        if (result == "You win!"){
+            wintielost[0]++;
+        } else if (result == "It's a tie!"){
+            wintielost[1]++;
+        } else {
+            wintielost[2]++;
+        }
+        Console.WriteLine(result + $" Wins: {wintielost[0]} Ties: {wintielost[1]} Losses: {wintielost[2]}");
+        gamecount++;
+        }
     }
 
     // Prompts the player and returns their choice as a lowercase string.
@@ -56,7 +66,6 @@ public class Program
             (player == "rock" && computer == "scissors") ||
             (player == "paper" && computer == "rock") ||
             (player == "scissors" && computer == "paper");
-
-        return playerWins ? "You win!" : "Computer wins!";
+        return playerWins ? $"You win!" : $"Computer wins!";
     }
 }
