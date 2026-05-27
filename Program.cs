@@ -35,24 +35,31 @@ public class Program
         while (reprompt) {
             Console.Write("Enter your choice (rock, paper, scissors): ");
             input = Console.ReadLine() ?? "";
-            if (!string.IsNullOrEmpty(input))
-            {
-                input = input.Trim().ToLower();
-                if (input == "rock" || input == "paper" || input == "scissors")
-                {
-                    reprompt = false;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid Syntax. Try Again.");
-                }
-            }
-            else 
-            {
-                Console.WriteLine("Please Enter Input.");
-            }
+            reprompt = ValidatePlayerChoice(input);
         }
         return input;
+    }
+
+    private static bool ValidatePlayerChoice(string input)
+    {
+        if (!string.IsNullOrEmpty(input))
+        {
+            input = input.Trim().ToLower();
+            if (input == "rock" || input == "paper" || input == "scissors")
+            {
+                return false;  // no reprompt needed
+            }
+            else
+            {
+                Console.WriteLine("Invalid Syntax. Try Again.");
+                return true;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Please Enter Input.");
+            return true;
+        }
     }
 
     // Picks rock, paper, or scissors at random for the computer.
