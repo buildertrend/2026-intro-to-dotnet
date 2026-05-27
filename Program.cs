@@ -32,6 +32,24 @@ public class Program
     {
         Console.Write("Enter your choice (rock, paper, scissors): ");
         string input = Console.ReadLine() ?? "";
+
+        bool valid = false;
+        input.Trim().ToLower(); 
+
+        while (valid == false) {
+
+            if ( input == "paper" || input == "scissors" || input == "rock" )
+            {
+                valid = true;
+                return input.Trim().ToLower();
+            }
+
+            Console.Write("That's not an option, silly! Try again. ");
+            Console.Write("Enter your choice (rock, paper, scissors): ");
+            input = Console.ReadLine() ?? "";
+            input.Trim().ToLower();
+        }
+
         return input.Trim().ToLower();
     }
 
