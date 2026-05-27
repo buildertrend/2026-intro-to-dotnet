@@ -11,7 +11,7 @@ public class Program
 {
     public static void Main()
     {
-        Console.WriteLine("=== Rock Paper Scissors ===");
+        Console.WriteLine("=== Rock Paper Scissors Lizard Spock ===");
         Console.WriteLine();
 
         string playerChoice = GetPlayerChoice();
@@ -30,7 +30,7 @@ public class Program
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors): ");
+        Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
         string input = Console.ReadLine() ?? "";
         return input.Trim().ToLower();
     }
@@ -38,7 +38,7 @@ public class Program
     // Picks rock, paper, or scissors at random for the computer.
     private static string GetComputerChoice()
     {
-        string[] choices = { "rock", "paper", "scissors" };
+        string[] choices = { "rock", "paper", "scissors", "lizard", "spock" };
         Random random = new Random();
         int index = random.Next(choices.Length);
         return choices[index];
@@ -51,11 +51,26 @@ public class Program
         {
             return "It's a tie!";
         }
-
+        /*
+        - Scissors cuts Paper
+        - Paper covers Rock
+        - Rock crushes Lizard
+        - Lizard poisons Spock
+        - Spock smashes Scissors
+        - Scissors decapitates Lizard
+        - Lizard eats Paper
+        - Paper disproves Spock
+        - Spock vaporizes Rock
+        - Rock crushes Scissors
+         */
         bool playerWins =
-            (player == "rock" && computer == "scissors") ||
-            (player == "paper" && computer == "rock") ||
-            (player == "scissors" && computer == "paper");
+            (player == "rock" && (computer == "scissors" || computer == "lizard")) ||
+            (player == "paper" && computer == "rock" || computer == "spock") ||
+            (player == "scissor" && (computer == "paper" || computer == "lizard")) ||
+            (player == "lizard" && (computer == "spock" || computer == "paper")) ||
+            (player == "spock" && (computer == "scissors" || computer == "rock"))
+            ;
+
 
         return playerWins ? "You win!" : "Computer wins!";
     }
