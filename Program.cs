@@ -13,6 +13,8 @@ public class Program
     static int losses=0;
     static int ties=0;
 
+
+
     public static void Main()
     {
         Console.WriteLine("===First to 3 Wins===");
@@ -22,8 +24,14 @@ public class Program
             Console.WriteLine();
 
             string playerChoice = GetPlayerChoice();
-            string computerChoice = GetComputerChoice();
 
+            if (playerChoice.ToLower() == "stats")
+            {
+                Console.WriteLine(getWLT());
+                continue;
+            }
+            string computerChoice = GetComputerChoice();
+            
             Console.WriteLine();
             Console.WriteLine($"You played:      {playerChoice}");
             Console.WriteLine($"Computer played: {computerChoice}");
