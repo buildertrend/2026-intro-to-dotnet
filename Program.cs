@@ -52,7 +52,20 @@ public class Program
         Console.WriteLine("You: " + userScore);
         Console.WriteLine("Computer: " + computerScore);
         Console.WriteLine("Ties: " + ties);
+        if(result.Contains("tie")){
+            i--;
+            Console.WriteLine("Tied round, adding another round...");
         }
+        }
+
+        if(userScore > computerScore){
+            Console.WriteLine("You won best out of " + rounds + " rounds!");
+        } else if (computerScore > userScore){
+            Console.WriteLine("Computer won best out of " + rounds + " rounds!");
+        } else {
+            Console.WriteLine("It's a tie!");
+        }
+
     }
 
     public static void UpdateScore(string result)
