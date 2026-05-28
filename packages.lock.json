@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dependencies": {
+    "net8.0": {
+      "Buildertrend.Utilities.Analyzers.HangfireAttributeAnalyzer": {
+        "type": "Direct",
+        "requested": "[1.0.3, )",
+        "resolved": "1.0.3",
+        "contentHash": "VAgSBmY1h9ddncHq4/3cZUo8Z1Q9pKuFBy2jQYrRTkUTalYzWxIa5ZOFuYZVGUq0r8TTaS4HQ/xeDYV74mQAqg=="
+      }
+    }
+  }
+}
