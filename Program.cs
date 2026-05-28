@@ -9,6 +9,13 @@ namespace RpsWorkshop;
 
 public class Program
 {
+    enum Move
+    {
+        rock,
+        paper,
+        scissors
+    }
+
     public static void Main()
     {
         Console.WriteLine("=== Rock Paper Scissors ===");
@@ -21,8 +28,8 @@ public class Program
         bool play_again = true;
         while (play_again)
         {
-            string playerChoice = GetPlayerChoice();
-            string computerChoice = GetComputerChoice();
+            Move playerChoice = GetPlayerChoice();
+            Move computerChoice = GetComputerChoice();
 
             Console.WriteLine();
             Console.WriteLine($"You played:      {playerChoice}");
@@ -81,7 +88,7 @@ public class Program
 
     // Prompts the player and returns their choice as a lowercase string.
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
-    private static string GetPlayerChoice()
+    private static Move GetPlayerChoice()
     {
         var reprompt = true;
         string input = "";
@@ -90,7 +97,20 @@ public class Program
             input = Console.ReadLine() ?? "";
             reprompt = ValidatePlayerChoice(input);
         }
-        return input;
+        input = input.Trim().ToLower();
+        if (input == "rock")
+        {
+            return Move.rock;
+        }
+        else if (input == "paper")
+        {
+            return Move.paper;
+        }
+        else
+        {
+            return Move.scissors;  // input is already validated, so 3rd option is scissors
+        }
+
     }
 
     private static bool ValidatePlayerChoice(string input)
@@ -116,16 +136,14 @@ public class Program
     }
 
     // Picks rock, paper, or scissors at random for the computer.
-    private static string GetComputerChoice()
+    private static Move GetComputerChoice()
     {
-        string[] choices = { "rock", "paper", "scissors" };
         Random random = new Random();
-        int index = random.Next(choices.Length);
-        return choices[index];
+        return (Move)random.Next(0, 3);
     }
 
     // Returns a string describing who won this round.
-    private static string DetermineWinner(string player, string computer)
+    private static string DetermineWinner(Move player, Move computer)
     {
         if (player == computer)
         {
@@ -133,9 +151,9 @@ public class Program
         }
 
         bool playerWins =
-            (player == "rock" && computer == "scissors") ||
-            (player == "paper" && computer == "rock") ||
-            (player == "scissors" && computer == "paper");
+            (player == Move.rock && computer == Move.scissors) ||
+            (player == Move.paper && computer == Move.rock) ||
+            (player == Move.scissors && computer == Move.paper);
 
         return playerWins ? "You win!" : "Computer wins!";
     }
