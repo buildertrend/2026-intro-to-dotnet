@@ -22,48 +22,94 @@ public class Program
     public static void Main(string[] args)
     {
         bool cheatEnabled = false;
+        int bestOf = 1;
         Option<bool> cheatOption = new("--cheat")
         {
             Description = "Let the computer cheat and always win"
         };
+        Option<int> bestOfOption = new("--bestof")
+        {
+            Description = "Play best out of N rounds."
+        };
 
         RootCommand rootCommand = new("RPS Game");
         rootCommand.Options.Add(cheatOption);
+        rootCommand.Options.Add(bestOfOption);
 
-        ParseResult parseResult = rootCommand.Parse(args);
-        if (parseResult.Errors.Count == 0)
+
+        rootCommand.SetAction(parseResult =>
         {
-            cheatEnabled = true;
+            cheatEnabled = parseResult.GetValue<bool>("--cheat");
+            bestOf = parseResult.GetValue<int>("--bestof");
+        });
+        ParseResult parseResult = rootCommand.Parse(args);
+        parseResult.Invoke();
+
+        // Must be an odd number
+        if (bestOf % 2 == 0)
+        {
+            bestOf += 1;
         }
 
         Console.WriteLine("=== Rock Paper Scissors ===");
 
-        List<GameOutcome> history = LoadGameOutcomes();
-        int wins = history.Where(o => o == GameOutcome.PlayerWin).Count();
-        int losses = history.Where(o => o == GameOutcome.ComputerWin).Count();
-        int ties = history.Where(o => o == GameOutcome.Tie).Count();
-        Console.Write($"Wins: {wins}, Losses: {losses}, Ties: {ties}");
+        Console.WriteLine($"Best of: {bestOf}");
 
-        Console.WriteLine();
+        int playerWins = 0;
+        int computerWins = 0;
 
-        string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice(cheatEnabled, playerChoice);
-
-        Console.WriteLine();
-        Console.WriteLine($"You played:      {playerChoice}");
-        Console.WriteLine($"Computer played: {computerChoice}");
-        Console.WriteLine();
-
-        GameOutcome outcome = DetermineWinner(playerChoice, computerChoice);
-        SaveGameOutcome(outcome);
-        string result = outcome switch
+        while ((PlayerWinBestOf(playerWins, computerWins, bestOf) != true) && (PlayerWinBestOf(playerWins, computerWins, bestOf) != false))
         {
-            GameOutcome.PlayerWin => "You win!",
-            GameOutcome.ComputerWin => "Computer wins.",
-            GameOutcome.Tie => "It's a tie!",
-            _ => "The programmer is stupid."
-        };
-        Console.WriteLine(result);
+            List<GameOutcome> history = LoadGameOutcomes();
+            int wins = history.Where(o => o == GameOutcome.PlayerWin).Count();
+            int losses = history.Where(o => o == GameOutcome.ComputerWin).Count();
+            int ties = history.Where(o => o == GameOutcome.Tie).Count();
+            Console.Write($"Wins: {wins}, Losses: {losses}, Ties: {ties}");
+
+            Console.WriteLine();
+
+            string playerChoice = GetPlayerChoice();
+            string computerChoice = GetComputerChoice(cheatEnabled, playerChoice);
+
+            Console.WriteLine();
+            Console.WriteLine($"You played:      {playerChoice}");
+            Console.WriteLine($"Computer played: {computerChoice}");
+            Console.WriteLine();
+
+            GameOutcome outcome = DetermineWinner(playerChoice, computerChoice);
+            SaveGameOutcome(outcome);
+            string result = outcome switch
+            {
+                GameOutcome.PlayerWin => "You win!",
+                GameOutcome.ComputerWin => "Computer wins.",
+                GameOutcome.Tie => "It's a tie!",
+                _ => "The programmer is stupid."
+            };
+            if (outcome == GameOutcome.PlayerWin)
+            {
+                playerWins += 1;
+            }
+            else if (outcome == GameOutcome.ComputerWin)
+            {
+                computerWins += 1;
+            }
+            Console.WriteLine($"{result} {playerWins}/{computerWins}");
+        }
+
+        bool? bestOfOutcome = PlayerWinBestOf(playerWins, computerWins, bestOf);
+
+        if (bestOfOutcome == true)
+        {
+            Console.WriteLine($"You win the best of {bestOf} with {playerWins} wins!");
+        }
+        else if (bestOfOutcome == false)
+        {
+            Console.WriteLine($"You lose the best of {bestOf} with {computerWins} losses.");
+        }
+        else
+        {
+            Console.WriteLine("Check your code because there's a logic bug");
+        }
     }
 
     // Prompts the player and returns their choice as a lowercase string.
@@ -150,5 +196,23 @@ public class Program
         }).ToList();
 
         return history;
+    }
+
+    private static bool? PlayerWinBestOf(int playerWins, int computerWins, int bestOf)
+    {
+        int needed = (bestOf + 1) / 2;
+
+        if (playerWins >= needed)
+        {
+            return true;
+        }
+        else if (computerWins >= needed)
+        {
+            return false;
+        }
+        else
+        {
+            return null;
+        }
     }
 }
