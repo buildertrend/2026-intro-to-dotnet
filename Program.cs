@@ -5,6 +5,8 @@
 //
 // Pick a feature from the README and go.
 
+using System.Drawing;
+
 namespace RpsWorkshop;
 
 public class Program
@@ -27,6 +29,11 @@ public class Program
     public static void Main()
     {
         const string WRITE_PATH = "./history.txt";
+        List<string> resultMessages = new List<string> { "You win!", "Computer wins!", "It's a tie!" };
+
+        int wins = 0;
+        int losses = 0;
+        int ties = 0;
 
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
@@ -34,6 +41,8 @@ public class Program
         // Game loop
         while (true)
         {
+
+            Console.WriteLine($"Score - You: {wins} Computer: {losses} Ties: {ties}");
 
             string playerChoice = GetPlayerChoice();
             string computerChoice = GetComputerChoice();
@@ -54,7 +63,7 @@ public class Program
                 "rock" => Choice.Rock,
                 "paper" => Choice.Paper,
                 "scissors" => Choice.Scissors,
-                _ => Choice.Invalid, // Should never occur
+                _ => Choice.Invalid, // Should never occur, but is handled anyway
             };
 
             if (playerChoiceEnum == Choice.Invalid)
@@ -64,12 +73,22 @@ public class Program
                 continue;
             }
 
+            // In case computer gives invalid choice
+            if (computerChoiceEnum == Choice.Invalid)
+            {
+                Console.WriteLine($"Computer improperly selected \"{computerChoice}\", restarting.");
+                Console.WriteLine();
+                continue;
+            }
+
             Console.WriteLine();
             Console.WriteLine($"You played:      {playerChoice}");
             Console.WriteLine($"Computer played: {computerChoice}");
             Console.WriteLine();
 
-            string result = DetermineWinner(playerChoiceEnum, computerChoiceEnum);
+            int resultInt = DetermineWinner(playerChoiceEnum, computerChoiceEnum);
+
+            string result = resultMessages[resultInt];
 
             try
             {
@@ -79,7 +98,25 @@ public class Program
             {
                 Console.WriteLine($"File append could not be performed: {ex.Message}");
             }
+
+            // Switch on results for scoreboard
+            switch (resultInt)
+            {
+                case 0:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    wins++;
+                    break;
+                case 1:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    losses++;
+                    break;
+                case 2:
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    ties++;
+                    break;
+            }
             Console.WriteLine(result);
+            Console.ForegroundColor = ConsoleColor.White; // Reset color
         }
     }
 
@@ -110,17 +147,17 @@ public class Program
         return choices[index];
     }
 
-    // Returns a string describing who won this round.
-    private static string DetermineWinner(Choice player, Choice computer)
+    // Returns an int describing who won this round (0 = player, 1 = computer, 2 = tie)
+    private static int DetermineWinner(Choice player, Choice computer)
     {
         if (player == computer)
         {
-            return "It's a tie!";
+            return 2;
         }
 
         // Using decision matrix
         bool playerWins = WinMatrix[player] == computer;
 
-        return playerWins ? "You win!" : "Computer wins!";
+        return playerWins ? 0 : 1;
     }
 }
