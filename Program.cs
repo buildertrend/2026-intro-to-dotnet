@@ -29,8 +29,11 @@ public class Program
         Console.WriteLine();
         Console.WriteLine("How many rounds do you want to play?");
         string roundInput = Console.ReadLine() ?? "";
-        string trimmedRound = roundInput.Trim().ToLower();
-        int rounds = int.Parse(trimmedRound);
+        int rounds;
+        while(!(int.TryParse(roundInput, out rounds))){
+            Console.WriteLine("Not a valid integer. How many rounds do you want to play?");
+            roundInput = Console.ReadLine() ?? "";
+        }
         Console.WriteLine();
 
         for(int i = 0; i < rounds; i++){
