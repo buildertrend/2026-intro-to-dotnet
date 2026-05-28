@@ -13,6 +13,10 @@ public class Program
 {
     public static void Main()
     {
+        int playerWins = 0;
+        int computerWins = 0;
+        int totalTies = 0;
+        
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
@@ -40,14 +44,19 @@ public class Program
 
             if (winner.Equals("You win!")) {
                 Console.ForegroundColor = ConsoleColor.Green;
+                playerWins++;
             } else if (winner.Equals("It's a tie!")) {
                 Console.ForegroundColor = ConsoleColor.Yellow;
+                totalTies++;
             } else {
                 Console.ForegroundColor = ConsoleColor.Red;
+                computerWins++;
             }
 
             Console.WriteLine(winner);
             Console.ResetColor();
+            
+            Console.WriteLine($"Score — You:{playerWins}   Computer: {computerWins}  Ties: {totalTies}");
 
         }
     }
