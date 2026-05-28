@@ -13,8 +13,10 @@ public class Program
 {
     public static void Main()
     {
+        
         int playerWins = 0;
         int computerWins = 0;
+        int ties = 0;
         while (playerWins < 2 && computerWins < 2)
         {
             Console.WriteLine("=== Rock Paper Scissors Lizard Spock ===");
@@ -40,8 +42,9 @@ public class Program
             }
             else
             {
-                continue;
+                ties++;
             }
+            Console.WriteLine($"\nScore:\n You: {playerWins} \n Computer: {computerWins} \n Ties: {ties}");
         }
     }
 
