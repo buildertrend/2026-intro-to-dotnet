@@ -38,7 +38,7 @@ public class Program
                 Console.ResetColor(); // Color reset fix
                 continue;
             }
-            string computerChoice = GetComputerChoice();
+            Choices computerChoice = GetComputerChoice();
 
             Console.WriteLine();
             Console.WriteLine($"You played:      {playerChoice}");
@@ -78,9 +78,9 @@ public class Program
     }
 
     // Picks rock, paper, or scissors at random for the computer.
-    private static string GetComputerChoice()
+    private static Choices GetComputerChoice()
     {
-        string[] choices = { "rock", "paper", "scissors" };
+        Choices[] choices = { Choices.Rock, Choices.Paper, Choices.Scissors };
         Random random = new Random();
         int index = random.Next(choices.Length);
         return choices[index];
@@ -137,7 +137,7 @@ public class Program
         return $"Score: [Wins: {wins}]  [Losses: {losses}] [Ties: {ties}]";
     }
 
-    private static string sendChoices(string player, string computer)
+    private static string sendChoices(string player, Choices computerChoice)
     {
         string normalizedPlayer = player.Trim().ToLower();
         Choices? playerChoice = normalizedPlayer switch
@@ -148,12 +148,6 @@ public class Program
             _ => null
         };
 
-        Choices computerChoice = computer switch
-        {
-            "rock" => Choices.Rock,
-            "paper" => Choices.Paper,
-            "scissors" => Choices.Scissors,
-        };
 
         if (playerChoice == null)
         {
