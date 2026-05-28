@@ -21,7 +21,7 @@ public class Program
         Console.WriteLine();
 
         Console.Write("How many rounds do you wish to play?: ");
-        int N = int.TryParse(Console.ReadLine(), out int pick) ? pick : 1;
+        int N = GetNumberOfRounds();
         int win = (N/2) + 1;
         int playerWins = 0;
         int computerWins = 0;
@@ -79,6 +79,18 @@ public class Program
         Random random = new Random();
         int index = random.Next(choices.Length);
         return choices[index];
+    }
+
+    // Picks an integer, N, for the number of rounds they wish to play.
+    private static int GetNumberOfRounds()
+    {
+        bool success = int.TryParse(Console.ReadLine(), out int pick);
+        while(!success)
+        {
+            Console.WriteLine("Please enter a valid integer: ");
+            success = int.TryParse(Console.ReadLine(), out pick);
+        }
+        return pick;
     }
 
     private static bool ValidateChoice(string input)
