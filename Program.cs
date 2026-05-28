@@ -7,13 +7,16 @@
 
 using System.ComponentModel;
 using System.IO.Pipes;
+using System.IO;
 
 namespace RpsWorkshop;
 
 public class Program
 {
+    
     public static void Main()
     {
+        
 
         Console.Write("How many rounds do you want to play? ");
         var rounds = int.Parse(Console.ReadLine() ?? "1");
@@ -37,6 +40,10 @@ public class Program
 
         string result = DetermineWinner(playerChoice, computerChoice);
         Console.WriteLine(result);
+        
+
+        File.AppendAllText("history.txt", $"Round {i+1}: Player: {playerChoice}, Computer: {computerChoice}, Result: {result}\n");
+
 
         if(result == "You win!")
             {
@@ -89,6 +96,9 @@ public class Program
                 a = false;
                 return input.Trim().ToLower();
             }
+            else if(input == "status"){
+                
+            }
             else{
                 Console.Write("Invalid choice. Please enter rock, paper, or scissors: ");
                 input = Console.ReadLine() ?? "";
@@ -118,7 +128,7 @@ public class Program
         }
 
         bool playerWins =
-            (player =="rock" && computer == "scissors") ||
+            (player == "rock" && computer == "scissors") ||
             (player == "paper" && computer == "rock") ||
             (player == "scissors" && computer == "paper");
 
