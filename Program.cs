@@ -9,9 +9,9 @@ namespace RpsWorkshop;
 
 public class Program
 {
-    static int wins=0;
-    static int losses=0;
-    static int ties=0;
+    static int wins = 0;
+    static int losses = 0;
+    static int ties = 0;
 
     public enum Choices
     {
@@ -22,9 +22,10 @@ public class Program
 
     public static void Main()
     {
+        Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("===First to 3 Wins===");
         Console.WriteLine("=== Rock Paper Scissors ===");
-     
+        Console.ResetColor();
         while (wins < 3 && losses < 3)
         {
             Console.WriteLine();
@@ -34,10 +35,11 @@ public class Program
             if (playerChoice.ToLower() == "stats")
             {
                 Console.WriteLine(getWLT());
+                Console.ResetColor(); // Color reset fix
                 continue;
             }
             string computerChoice = GetComputerChoice();
-            
+
             Console.WriteLine();
             Console.WriteLine($"You played:      {playerChoice}");
             Console.WriteLine($"Computer played: {computerChoice}");
@@ -45,16 +47,24 @@ public class Program
 
             string result = sendChoices(playerChoice, computerChoice);
             Console.WriteLine(result);
+            Console.ResetColor();
             string score = getWLT();
             Console.WriteLine(score);
+            Console.ResetColor();
         }
-        if(losses >= 3)
+        if (losses >= 3)
         {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White; // Color visibility fix
             Console.WriteLine("Game Over, Computer Wins!");
+            Console.ResetColor();
         }
         else
         {
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Black; // Color visibility fix
             Console.WriteLine("Game Over, You Win!");
+            Console.ResetColor();
         }
     }
 
@@ -82,7 +92,9 @@ public class Program
         if (player == computer)
         {
             ties++;
-            return "It's a tie!"; 
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            return "It's a tie!";
         }
 
         bool playerWins =
@@ -93,21 +105,39 @@ public class Program
         if (playerWins)
         {
             wins++;
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Black; // Color visibility fix
         }
         else
         {
             losses++;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White; // Color visibility fix
         }
-            return playerWins ? "You win!" : "Computer wins!";
+        return playerWins ? "You win!" : "Computer wins!";
     }
 
     private static string getWLT()
     {
-
+        if (wins == losses)
+        {
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+        }
+        else if (wins > losses)
+        {
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Black; // Color visibility fix
+        }
+        else
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White; // Color visibility fix
+        }
         return $"Score: [Wins: {wins}]  [Losses: {losses}] [Ties: {ties}]";
     }
 
-   private static string sendChoices(string player, string computer)
+    private static string sendChoices(string player, string computer)
     {
         string normalizedPlayer = player.Trim().ToLower();
         Choices? playerChoice = normalizedPlayer switch
@@ -125,7 +155,7 @@ public class Program
             "scissors" => Choices.Scissors,
         };
 
-        if(playerChoice == null)
+        if (playerChoice == null)
         {
             return "Invalid Choice. Try Again.";
         }
