@@ -69,6 +69,7 @@ public class Program
     {
         while (true)
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
             string input = Console.ReadLine() ?? "";
 
@@ -78,6 +79,7 @@ public class Program
                 input != "scissors" && input != "lizard"
                 && input != "spock")
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid Input");
             }
             else
@@ -89,15 +91,18 @@ public class Program
 
     private static int getNumRounds()
     {
+        
         while (true)
         {
-            Console.Write("First to: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("Input what score you want to go to: ");
             string input = Console.ReadLine() ?? "";
             try
             {
                 int num = Int32.Parse(input);
                 if (num <= 0)
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Invalid Input");
                 }
                 else
@@ -107,6 +112,7 @@ public class Program
             }
             catch
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Input was not a number");
             }
         }
