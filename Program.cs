@@ -80,13 +80,12 @@ public class Program
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
-        
+        while(true){
         Console.Write("Enter your choice (rock, paper, scissors): ");
         string input = Console.ReadLine() ?? "";
         input=input.Trim().ToLower();
 
         
-        while(true){
             if(input=="rock"||input=="paper"||input=="scissors"){
                  return input.Trim().ToLower();
                  
@@ -95,23 +94,20 @@ public class Program
             else if (input == "stats")
             {
                 Console.WriteLine($"W : {pcount} L: {ccount} T: {tie}");
-                Console.Write("Enter your choice (rock, paper, scissors): ");
-                input = Console.ReadLine() ?? "";
-                input=input.Trim().ToLower();
+                
 
             }
             else{
                Console.WriteLine("Invalid input Try again");
-               Console.Write("Enter your choice (rock, paper, scissors): ");
-               input = Console.ReadLine() ?? "";
-               input=input.Trim().ToLower();
+               
            
 
         }
         
         }
-            return input.Trim().ToLower();
+         
     }
+  
 
     // Picks rock, paper, or scissors at random for the computer.
     private static string GetComputerChoice()
