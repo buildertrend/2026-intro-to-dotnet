@@ -14,16 +14,46 @@ public class Program
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice();
+        bool play_again = true;
+        while (play_again)
+        {
+            string playerChoice = GetPlayerChoice();
+            string computerChoice = GetComputerChoice();
 
-        Console.WriteLine();
-        Console.WriteLine($"You played:      {playerChoice}");
-        Console.WriteLine($"Computer played: {computerChoice}");
-        Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine($"You played:      {playerChoice}");
+            Console.WriteLine($"Computer played: {computerChoice}");
+            Console.WriteLine();
 
-        string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+            string result = DetermineWinner(playerChoice, computerChoice);
+            Console.WriteLine(result);
+            play_again = CheckIfNextRound();
+        }
+    }
+
+    private static bool CheckIfNextRound()
+    {
+        Console.WriteLine("Would you like to play again (y/n)?");
+        string input = "";
+        bool waitingOnInput = true;
+        while (waitingOnInput)
+        {
+            input = Console.ReadLine() ?? "";
+            input = input.Trim().ToLower();
+            if (input == "y")
+            {
+                return true;  // user wants to play again
+            }
+            else if (input == "n")
+            {
+                return false; // user does not want to play again
+            }
+            else
+            {
+                Console.WriteLine("Please Enter y or n.");
+            }
+        }
+        return false;
     }
 
     // Prompts the player and returns their choice as a lowercase string.
