@@ -8,6 +8,7 @@
 namespace RpsWorkshop;
 
 public enum Move{
+        unknown,
         rock,
         paper,
         scissors,
@@ -36,10 +37,22 @@ public class Program
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static Move GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors): ");
-        string input = Console.ReadLine() ?? "";
-        string move = input.Trim().ToLower();
-        return stringToMove(move);
+        Move enumMove = Move.unknown;
+        bool repeat = false;
+        while (enumMove == Move.unknown) {
+            if (repeat)
+            {
+                Console.Write("Invalid input. Enter your choice (rock, paper, scissors): ");
+            } else
+            {
+                Console.Write("Enter your choice (rock, paper, scissors): ");
+                repeat = true;
+            }
+            string input = Console.ReadLine() ?? "";
+            string move = input.Trim().ToLower();
+            enumMove = stringToMove(move);
+    }
+        return enumMove;
     }
 
     // Picks rock, paper, or scissors at random for the computer.
@@ -59,7 +72,7 @@ public class Program
             "rock" => Move.rock,
             "paper" => Move.paper,
             "scissors" => Move.scissors,
-            _ => Move.rock,
+            _ => Move.unknown,
         };
         return move;
     }
