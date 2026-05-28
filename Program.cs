@@ -17,7 +17,7 @@ public class Program
         bool computerCheats = false;
         if (args.Length == 1)
         {
-            if (args[1] == "--cheat")
+            if (args[0] == "--cheat")
             {
                 computerCheats = true;
             }
