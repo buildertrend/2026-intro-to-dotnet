@@ -18,11 +18,22 @@ enum Choice
 
 public class Program
 {
+    private static int userScore = 0;
+    private static int computerScore = 0;
+    private static int ties = 0;
+
     public static void Main()
     {
+
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
+        Console.WriteLine("How many rounds do you want to play?");
+        string roundInput = Console.ReadLine() ?? "";
+        string trimmedRound = roundInput.Trim().ToLower();
+        int rounds = int.Parse(trimmedRound);
+        Console.WriteLine();
 
+        for(int i = 0; i < rounds; i++){
         Choice playerChoice = GetPlayerChoice();
         Choice computerChoice = GetComputerChoice();
 
@@ -32,7 +43,24 @@ public class Program
         Console.WriteLine();
 
         string result = DetermineWinner(playerChoice, computerChoice);
+        UpdateScore(result);
         Console.WriteLine(result);
+        Console.WriteLine("Scores:");
+        Console.WriteLine("You: " + userScore);
+        Console.WriteLine("Computer: " + computerScore);
+        Console.WriteLine("Ties: " + ties);
+        }
+    }
+
+    public static void UpdateScore(string result)
+    {
+        if (result.Contains("Computer")){
+            computerScore++;
+        } else if (result.Contains("You")){
+            userScore++;
+        } else {
+            ties++;
+        }
     }
 
     // Prompts the player and returns their choice as a lowercase string.
