@@ -6,13 +6,23 @@
 // Pick a feature from the README and go.
 
 using System.ComponentModel.Design;
+using System.Runtime.CompilerServices;
 
 namespace RpsWorkshop;
 
 public class Program
 {
-    public static void Main()
+    public static void Main(string[] args)
     {
+        bool computerCheats = false;
+        if (args.Length == 1)
+        {
+            if (args[1] == "--cheat")
+            {
+                computerCheats = true;
+            }
+        }
+        
         Dictionary<string, int> results = new Dictionary<string, int>();
         results["playerWins"] = 0;
         results["computerWins"] = 0;
@@ -29,21 +39,22 @@ public class Program
             {
                 playerChoice = GetPlayerChoice();
             }
-            string computerChoice = GetComputerChoice();
+            string computerChoice = GetComputerChoice(playerChoice, computerCheats);
 
             Console.WriteLine();
             Console.WriteLine($"You played:      {playerChoice}");
             Console.WriteLine($"Computer played: {computerChoice}");
             Console.WriteLine();
 
-            string result = DetermineWinner(playerChoice, computerChoice, results, rounds);
+            string result = DetermineWinner(playerChoice, computerChoice, results);
+            SaveSession(result);
             Console.WriteLine(result);
 
             Console.WriteLine();
             Console.WriteLine($"Player Wins: {results["playerWins"]} | Computer Wins: {results["computerWins"]} | Draws: {results["draw"]}");
 
             winner = DetermineGameWinner(results, rounds); 
-        }
+        } 
         
     }
 
@@ -52,11 +63,17 @@ public class Program
         int rounds = 0;
         while (rounds < 1)
         {
-            Console.WriteLine("How many games do you want to play?");
+            Console.WriteLine("How many games do you want to play? Enter [Stats] to see lifetime stats");
 
             try
             {
-                rounds = int.Parse(Console.ReadLine());
+                string input = Console.ReadLine().Trim().ToLower(); 
+                if (input == "stats")
+                {
+                    GetStats();
+                    continue; 
+                }
+                rounds = int.Parse(input);
                 if (rounds % 2 == 0)
                 {
                     throw new Exception("Games to play must be an Odd Integer");
@@ -84,8 +101,26 @@ public class Program
     }
 
     // Picks rock, paper, or scissors at random for the computer.
-    private static string GetComputerChoice()
+    private static string GetComputerChoice(string playerChoice, bool computerCheats)
     {
+        if (computerCheats)
+        {
+            string computerChoice = "";
+            switch (playerChoice)
+            {
+                case "rock":
+                    computerChoice = "paper";
+                    break;
+                case "paper":
+                    computerChoice = "scissors";
+                    break;
+                default:
+                    computerChoice = "paper";
+                    break;
+            }
+            return computerChoice;
+        } 
+
         string[] choices = { "rock", "paper", "scissors" };
         Random random = new Random();
         int index = random.Next(choices.Length);
@@ -104,7 +139,7 @@ public class Program
     }
 
     // Returns a string describing who won this round. Increments scoreboard.
-    private static string DetermineWinner(string player, string computer, Dictionary<string, int> results, int rounds)
+    private static string DetermineWinner(string player, string computer, Dictionary<string, int> results)
     {
         if (player == computer)
         {
@@ -161,4 +196,37 @@ public class Program
         
         return false;
     }
+
+    private static void SaveSession(string message)
+    {
+        string filePath = $"{Directory.GetCurrentDirectory()}\\history.txt";
+
+        using (StreamWriter writer = new StreamWriter(filePath, true)) // append=true
+        {
+            writer.WriteLine(message);
+        }
+    }
+
+    private static void GetStats()
+    {
+        int playerWins = 0;
+        int computerWins = 0;
+        int draws = 0;
+
+        string filePath = $"{Directory.GetCurrentDirectory()}\\history.txt";
+        using (StreamReader reader = new StreamReader(filePath))
+        {
+            string line;
+            // ReaderObject reads a single line, stores it in Line string variable and then displays it on
+            // console
+            while ((line = reader.ReadLine()) != null)
+            {
+                if (line.Trim().ToLower() == "you win!") playerWins++;
+                if (line.Trim().ToLower() == "computer wins!") computerWins++;
+                if (line.Trim().ToLower() == "it's a tie!") draws++;
+            }
+
+            Console.WriteLine($"LIFETIME STATS: Player Wins: {playerWins} | Computer Wins: {computerWins} | Ties: {draws}");
+        }
+    } 
 }
