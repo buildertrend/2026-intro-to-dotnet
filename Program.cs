@@ -12,7 +12,11 @@ public class Program
     public static void Main()
     {
         Console.WriteLine("=== Rock Paper Scissors ===");
+        int player_wins = 0;
+        int comp_wins = 0;
+        PrintScoreboard(player_wins, comp_wins);
         Console.WriteLine();
+
 
         bool play_again = true;
         while (play_again)
@@ -26,9 +30,28 @@ public class Program
             Console.WriteLine();
 
             string result = DetermineWinner(playerChoice, computerChoice);
+            UpdateScores(ref player_wins, ref comp_wins, result);
+            PrintScoreboard(player_wins, comp_wins);
             Console.WriteLine(result);
             play_again = CheckIfNextRound();
         }
+    }
+
+    private static void UpdateScores(ref int player_wins, ref int comp_wins, string result)
+    {
+        if (result == "You win!")
+        {
+            player_wins++;
+        }
+        else if (result == "Computer wins!")
+        {
+            comp_wins++;
+        }
+    }
+
+    private static void PrintScoreboard(int player_wins, int comp_wins)
+    {
+        Console.WriteLine($"Numer of Wins:  You - {player_wins} | Computer - {comp_wins}");
     }
 
     private static bool CheckIfNextRound()
