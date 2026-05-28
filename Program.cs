@@ -9,14 +9,19 @@ namespace RpsWorkshop;
 
 public class Program
 {
+    private static Random random = new Random();
+
     public static void Main()
     {
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
-        if(playerChoice == "rock" || playerChoice == "paper" || playerChoice == "scissors")
+        int playerScore = 0;
+        int computerScore = 0;
+
+        while(playerScore < 2 && computerScore < 2) 
         {
+            string playerChoice = GetPlayerChoice();
             string computerChoice = GetComputerChoice();
 
             Console.WriteLine();
@@ -24,13 +29,42 @@ public class Program
             Console.WriteLine($"Computer played: {computerChoice}");
             Console.WriteLine();
 
-            string result = DetermineWinner(playerChoice, computerChoice);
-            Console.WriteLine(result);
+         //    string result = DetermineWinner(playerChoice, computerChoice);
+         //    Console.WriteLine(result);
+
+            int roundWinner = NRoundsWinner(playerChoice, computerChoice);
+
+            // A switch that helps print out the messages based of the round winner.
+            string message = roundWinner switch
+            {
+                1 => "You win! :)",
+                2 => "Computer wins! :(",
+                0 => "It's a tie...",
+                _ => "Error, the programmer is silly.",
+            };
+            Console.WriteLine(message);
+            
+            if(roundWinner == 1) 
+            {
+                playerScore++;
+            } 
+            else if (roundWinner == 2)
+            {
+                computerScore++;
+            }
+
+            Console.WriteLine($"Player Score: {playerScore} - Computer Score: {computerScore}");
+            Console.WriteLine();
         }
-        else
-        {
-            Console.WriteLine($"The choice {playerChoice} is not valid");
+
+        if(playerScore > computerScore) {
+            Console.WriteLine("Congratulations :) You won!");
+        } else {
+            Console.WriteLine("Sorry...You LOST!");
         }
+        Console.WriteLine();
+        Console.WriteLine("Final Score: ");
+        Console.WriteLine($"Player: {playerScore} - Computer: {computerScore}");
     }
 
     private static bool IsValidChoice(string validChoice)
@@ -55,30 +89,50 @@ public class Program
         }
     }
 
-    }
-
     // Picks rock, paper, or scissors at random for the computer.
     private static string GetComputerChoice()
     {
         string[] choices = { "rock", "paper", "scissors" };
-        Random random = new Random();
+        // Random random = new Random();
         int index = random.Next(choices.Length);
         return choices[index];
-    }
+    
+}
 
     // Returns a string describing who won this round.
-    private static string DetermineWinner(string player, string computer)
+ //    private static string DetermineWinner(string player, string computer)
+ //    {
+ //        if (player == computer)
+ //        {
+ //            return "It's a tie!";
+ //        }
+
+ //        bool playerWins =
+ //            (player == "rock" && computer == "scissors") ||
+ //            (player == "paper" && computer == "rock") ||
+ //            (player == "scissors" && computer == "paper");
+
+ //        return playerWins ? "You win!" : "Computer wins!";
+ //    
+
+    // Returns a number either 1 or 2 depending on who wins the round.
+    // This will help the porgram to increment the Score of the player/computer.
+    private static int NRoundsWinner(string player, string computer) 
     {
-        if (player == computer)
+        if(player == computer) 
         {
-            return "It's a tie!";
+            return 0;
         }
 
-        bool playerWins =
+        bool winner = 
             (player == "rock" && computer == "scissors") ||
-            (player == "paper" && computer == "rock") ||
-            (player == "scissors" && computer == "paper");
+            (player == "scissors" && computer == "paper") ||
+            (player == "paper" && computer == "rock");
 
-        return playerWins ? "You win!" : "Computer wins!";
+        if(winner == true) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 }
