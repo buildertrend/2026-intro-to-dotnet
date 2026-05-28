@@ -16,16 +16,29 @@ public class Program
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice();
+        Console.WriteLine("How many rounds do you want to play?: ");
+        string rounds = Console.ReadLine() ?? "1";
+        
+        if (int.TryParse(rounds, out int result))
+        {
+            Console.WriteLine($"Got it! Starting round 1 of {result}");
+        } else {
+            Console.WriteLine("That's not a number, silly...");
+        }
 
-        Console.WriteLine();
-        Console.WriteLine($"You played:      {playerChoice}");
-        Console.WriteLine($"Computer played: {computerChoice}");
-        Console.WriteLine();
+        for (int i = 0; i < result; i++)
+        {
+            string playerChoice = GetPlayerChoice();
+            string computerChoice = GetComputerChoice();
 
-        string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+            Console.WriteLine();
+            Console.WriteLine($"You played:      {playerChoice}");
+            Console.WriteLine($"Computer played: {computerChoice}");
+            Console.WriteLine();
+
+            string winner = DetermineWinner(playerChoice, computerChoice);
+            Console.WriteLine(winner);
+        }
     }
 
     // Prompts the player and returns their choice as a lowercase string.
@@ -36,23 +49,23 @@ public class Program
         string input = Console.ReadLine() ?? "";
 
         bool valid = false;
-        input.Trim().ToLower(); 
+        input = input.Trim().ToLower(); 
 
-        while (valid == false) {
+        while (!valid) {
 
-            if ( input == "paper" || input == "scissors" || input == "rock" || input == "lizard" || input == "spock" )
+            if (String.Equals(input, "paper") || String.Equals(input, "scissors") || String.Equals(input, "rock") || String.Equals(input, "lizard") || String.Equals(input, "spock"))
             {
-                valid = true;
-                return input.Trim().ToLower();
+                break;
             }
 
             Console.Write("That's not an option, silly! Try again. ");
+            Console.WriteLine();
             Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
             input = Console.ReadLine() ?? "";
-            input.Trim().ToLower();
+            input = input.Trim().ToLower();
         }
 
-        return input.Trim().ToLower();
+        return input;
     }
 
     // Picks rock, paper, or scissors at random for the computer.
