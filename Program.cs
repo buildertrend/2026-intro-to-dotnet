@@ -20,6 +20,14 @@ public class Program
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
+        Console.Write("How many rounds do you wish to play?: ");
+        int N = int.TryParse(Console.ReadLine(), out int pick) ? pick : 1;
+        int win = (N/2) + 1;
+        int playerWins = 0;
+        int computerWins = 0;
+
+        while((playerWins < win) && (computerWins < win))
+       {
         string playerChoice = string.Empty;
         while (!ValidateChoice(playerChoice))
         {
@@ -37,8 +45,22 @@ public class Program
         Console.WriteLine();
 
         string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+        Console.WriteLine(result + " This round...");
         File.AppendAllText(filepath, ", Result: " + result + "\n");
+        if(result.Equals("\n\nYou win!"))
+        {
+            playerWins+=1;
+        }
+        else if(result.Equals("Computer wins!"))
+        {
+            computerWins+=1;
+        }
+        Console.WriteLine($"Your Wins: {playerWins}  Computer Wins: {computerWins}   Out of {N} rounds");
+       } 
+       string winner = (playerWins == win) ? "Player" : "Computer";
+       Console.WriteLine($"{winner} wins the game!");
+
+        
     }
 
     // Prompts the player and returns their choice as a lowercase string.
