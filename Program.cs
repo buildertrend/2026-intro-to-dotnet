@@ -59,6 +59,22 @@ public class Program
             Console.WriteLine($"Score — You:{playerWins}   Computer: {computerWins}  Ties: {totalTies}");
 
         }
+
+        if (playerWins > computerWins)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine("Player wins! Congratulations!");
+        } else if (computerWins > playerWins)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("Computer wins! Better luck next time...");
+        } else
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("Looks like a wash!");
+        }
+
+        Console.ResetColor();
     }
 
     // Prompts the player and returns their choice as a lowercase string.
