@@ -13,12 +13,18 @@ public class Program
     static int losses=0;
     static int ties=0;
 
-
+    public enum Choices
+    {
+        Rock,
+        Paper,
+        Scissors
+    }
 
     public static void Main()
     {
         Console.WriteLine("===First to 3 Wins===");
         Console.WriteLine("=== Rock Paper Scissors ===");
+     
         while (wins < 3 && losses < 3)
         {
             Console.WriteLine();
@@ -37,7 +43,7 @@ public class Program
             Console.WriteLine($"Computer played: {computerChoice}");
             Console.WriteLine();
 
-            string result = DetermineWinner(playerChoice, computerChoice);
+            string result = sendChoices(playerChoice, computerChoice);
             Console.WriteLine(result);
             string score = getWLT();
             Console.WriteLine(score);
@@ -71,7 +77,7 @@ public class Program
     }
 
     // Returns a string describing who won this round.
-    private static string DetermineWinner(string player, string computer)
+    private static string DetermineWinner(Choices? player, Choices? computer)
     {
         if (player == computer)
         {
@@ -80,9 +86,9 @@ public class Program
         }
 
         bool playerWins =
-            (player == "rock" && computer == "scissors") ||
-            (player == "paper" && computer == "rock") ||
-            (player == "scissors" && computer == "paper");
+            (player == Choices.Rock && computer == Choices.Scissors) ||
+            (player == Choices.Paper && computer == Choices.Rock) ||
+            (player == Choices.Scissors && computer == Choices.Paper);
 
         if (playerWins)
         {
@@ -99,6 +105,27 @@ public class Program
     {
 
         return $"Score: [Wins: {wins}]  [Losses: {losses}] [Ties: {ties}]";
+    }
+
+   private static string sendChoices(string player, string computer)
+    {
+        Choices? playerChoice = player switch
+        {
+            "rock" => Choices.Rock,
+            "paper" => Choices.Paper,
+            "scissors" => Choices.Scissors,
+            _ => null
+        };
+
+        Choices? computerChoice = computer switch
+        {
+            "rock" => Choices.Rock,
+            "paper" => Choices.Paper,
+            "scissors" => Choices.Scissors,
+            _ => null
+        };
+
+        return DetermineWinner(playerChoice, computerChoice);
     }
 
 }
