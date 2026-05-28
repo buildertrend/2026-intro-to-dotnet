@@ -12,28 +12,63 @@ public class Program
     public enum Choice { Unknown, Rock, Paper, Scissors, Lizard, Spock }
     public static void Main(string[] args)
     {
+        Boolean cheat = false;
+        if(args.Length > 0 && args[0] == "--cheat")
+        {
+            cheat = true;
+        }
         Console.WriteLine("=== Rock Paper Scissors Lizard Spock ===");
         Console.WriteLine();
-
-        Choice playerChoice = GetPlayerChoice();
-
-        Choice computerChoice;
-        if (args.Length >= 0 && args[0] == "--cheat")
+        int numRounds = getRounds();
+        int round = 1;
+        int playerWins = 0;
+        int compWins = 0;
+        Choice prevPlayerChoice = Choice.Unknown;
+        while (round <= numRounds && (playerWins < (numRounds / 2) + 1) && (compWins < (numRounds / 2) + 1))
         {
-            computerChoice = GetComputerChoice(playerChoice);
+            Console.WriteLine("Round " + round);
+            Choice playerChoice = GetPlayerChoice();
+
+            Choice computerChoice;
+            if (cheat && prevPlayerChoice != Choice.Unknown)
+            {
+                computerChoice = GetComputerChoice(prevPlayerChoice);
+            }
+            else
+            {
+                computerChoice = GetComputerChoice();
+            }
+            prevPlayerChoice = playerChoice;
+
+            Console.WriteLine();
+            Console.WriteLine($"You played:      {playerChoice}");
+            Console.WriteLine($"Computer played: {computerChoice}");
+            Console.WriteLine();
+
+            String result = DetermineWinner(playerChoice, computerChoice);
+            Console.WriteLine(result);
+            if (result == "You win!")
+            {
+                playerWins++;
+            } else if (result == "Computer wins!")
+            {
+                compWins++;
+            }
+            Console.WriteLine("\nCurrent Score is:\nPlayer Wins: " + playerWins + "\nComputer Wins: " + compWins + "\n(Ties are not counted)\n");
+        }
+        Console.WriteLine();
+        if (playerWins > compWins)
+        {
+            Console.WriteLine("You Win!!!");
+        }
+        else if (playerWins < compWins)
+        {
+            Console.WriteLine("Computer Wins!!");
         }
         else
         {
-            computerChoice = GetComputerChoice();
+            Console.WriteLine("Tie!!!");
         }
-
-        Console.WriteLine();
-        Console.WriteLine($"You played:      {playerChoice}");
-        Console.WriteLine($"Computer played: {computerChoice}");
-        Console.WriteLine();
-
-        String result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
     }
 
     // Prompts the player and returns their choice as a lowercase string.
@@ -109,5 +144,26 @@ public class Program
             case Choice.Spock: return Choice.Lizard;
             default : return Choice.Unknown;
         };
+    }
+
+    private static int getRounds()
+    {
+        Console.WriteLine("Enter the number of rounds you want to play");
+        int numRounds = 0;
+        while(numRounds < 1)
+        {
+            try
+            {
+                String input = Console.ReadLine() ?? "";
+                if(!int.TryParse(input, out numRounds))
+                {
+                    Console.WriteLine("Must enter an integer");
+                }
+            }
+            catch(Exception e) {
+                throw new Exception(e + "numRounds must be an integer");
+            }
+        }
+        return numRounds;
     }
 }
