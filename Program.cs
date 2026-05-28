@@ -71,14 +71,17 @@ public class Program
     private static Choice GetPlayerChoice()
     {
         Console.Write("Enter your choice (rock, paper, scissors): ");
+        Choice choice;
         string input = Console.ReadLine() ?? "";
         string trimmed = input.Trim().ToLower();
-        if (Enum.TryParse<Choice>(trimmed, ignoreCase: true, out Choice choice))
+        while (!(Enum.TryParse<Choice>(trimmed, ignoreCase: true, out choice) && Enum.IsDefined(typeof(Choice), choice)))
         {
-            return choice;
+            Console.Write("Invalid choice, please enter rock, paper, or scissors: ");
+            input = Console.ReadLine() ?? "";
+            trimmed = input.Trim().ToLower();
         }
-        Console.WriteLine("Invalid choice. Defaulting to rock.");
-        return Choice.Rock; // Default to rock if input is invalid. 
+
+        return choice;
     }
 
     // Picks rock, paper, or scissors at random for the computer.
