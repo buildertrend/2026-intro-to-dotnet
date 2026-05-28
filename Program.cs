@@ -9,21 +9,53 @@ namespace RpsWorkshop;
 
 public class Program
 {
+    private const string WinningText = "You win!";
+    private const string LosingText = "Computer wins!";
+    private const string TieText = "It's a tie!";
     public static void Main()
     {
-        Console.WriteLine("=== Rock Paper Scissors ===");
-        Console.WriteLine();
+        int playerWins = 0;
+        int computerWins = 0;
+        int ties = 0;
+        while (!IsGameOver(playerWins, computerWins, 3))
+        {
+            Console.WriteLine("=== Rock Paper Scissors ===");
+            Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice();
+            string playerChoice = GetPlayerChoice();
+            string computerChoice = GetComputerChoice();
 
-        Console.WriteLine();
-        Console.WriteLine($"You played:      {playerChoice}");
-        Console.WriteLine($"Computer played: {computerChoice}");
-        Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine($"You played:      {playerChoice}");
+            Console.WriteLine($"Computer played: {computerChoice}");
+            Console.WriteLine();
 
-        string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+            string result = DetermineWinner(playerChoice, computerChoice);
+            if (result == WinningText)
+            {
+                playerWins++;
+            }
+            else if (result == LosingText)
+            {
+                computerWins++;
+            }
+            else
+            {
+                ties++;
+            }
+            Console.WriteLine(GetScoreboard(playerWins, computerWins, ties));
+            Console.WriteLine(result);
+        }
+    }
+
+    private static bool IsGameOver(int playerWins, int computerWins, int numOfGames)
+    {
+        return playerWins >= numOfGames || computerWins >= numOfGames;
+    }
+
+    private static string GetScoreboard(int playerWins, int computerWins, int ties)
+    {
+        return $"Score: Player {playerWins} - Computer {computerWins} - Ties {ties}";
     }
 
     // Prompts the player and returns their choice as a lowercase string.
