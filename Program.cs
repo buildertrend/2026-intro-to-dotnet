@@ -13,7 +13,8 @@ public class Program
     {
         rock,
         paper,
-        scissors
+        scissors,
+        gun
     }
 
     public static void Main()
@@ -93,7 +94,7 @@ public class Program
         var reprompt = true;
         string input = "";
         while (reprompt) {
-            Console.Write("Enter your choice (rock, paper, scissors): ");
+            Console.Write("Enter your choice (rock, paper, scissors): ");  // gun is hidden ;)
             input = Console.ReadLine() ?? "";
             reprompt = ValidatePlayerChoice(input);
         }
@@ -106,9 +107,13 @@ public class Program
         {
             return Move.paper;
         }
-        else
+        else if (input == "scissors")
         {
             return Move.scissors;  // input is already validated, so 3rd option is scissors
+        }
+        else
+        {
+            return Move.gun;
         }
 
     }
@@ -118,7 +123,7 @@ public class Program
         if (!string.IsNullOrEmpty(input))
         {
             input = input.Trim().ToLower();
-            if (input == "rock" || input == "paper" || input == "scissors")
+            if (input == "rock" || input == "paper" || input == "scissors" || input == "gun")
             {
                 return false;  // no reprompt needed
             }
@@ -139,7 +144,7 @@ public class Program
     private static Move GetComputerChoice()
     {
         Random random = new Random();
-        return (Move)random.Next(0, 3);
+        return (Move)random.Next(0, 3);  // computer cannot choose gun
     }
 
     // Returns a string describing who won this round.
@@ -153,7 +158,8 @@ public class Program
         bool playerWins =
             (player == Move.rock && computer == Move.scissors) ||
             (player == Move.paper && computer == Move.rock) ||
-            (player == Move.scissors && computer == Move.paper);
+            (player == Move.scissors && computer == Move.paper) ||
+            (player == Move.gun);
 
         return playerWins ? "You win!" : "Computer wins!";
     }
