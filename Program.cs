@@ -24,14 +24,16 @@ public class Program
 
     public static void Main()
     {
-
+        Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
         Console.WriteLine("How many rounds do you want to play?");
         string roundInput = Console.ReadLine() ?? "";
         int rounds;
         while(!(int.TryParse(roundInput, out rounds))){
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Not a valid integer. How many rounds do you want to play?");
+            Console.ForegroundColor = ConsoleColor.White;
             roundInput = Console.ReadLine() ?? "";
         }
         Console.WriteLine();
@@ -59,11 +61,17 @@ public class Program
         }
 
         if(userScore > computerScore){
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("You won best out of " + rounds + " rounds!");
+            Console.ForegroundColor = ConsoleColor.White;
         } else if (computerScore > userScore){
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Computer won best out of " + rounds + " rounds!");
+            Console.ForegroundColor = ConsoleColor.White;
         } else {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("It's a tie!");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
     }
@@ -89,7 +97,9 @@ public class Program
         string trimmed = input.Trim().ToLower();
         while (!(Enum.TryParse<Choice>(trimmed, ignoreCase: true, out choice) && Enum.IsDefined(typeof(Choice), choice)))
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("Invalid choice, please enter rock, paper, or scissors: ");
+            Console.ForegroundColor = ConsoleColor.White;
             input = Console.ReadLine() ?? "";
             trimmed = input.Trim().ToLower();
         }
@@ -97,10 +107,10 @@ public class Program
         return choice;
     }
 
+    private static readonly Random random = new Random();
     // Picks rock, paper, or scissors at random for the computer.
     private static Choice GetComputerChoice()
     {
-        Random random = new Random();
         int index = random.Next(Enum.GetValues(typeof(Choice)).Length);
         return (Choice)index;
     }
