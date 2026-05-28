@@ -5,30 +5,44 @@
 //
 // Pick a feature from the README and go.
 
+using System.Reflection.Metadata.Ecma335;
+
 namespace RpsWorkshop;
 
 public class Program
 {
     public static void Main()
     {
-        Console.WriteLine("=== Rock Paper Scissors Lizard Spock ===");
-        Console.WriteLine();
+        int playerWins = 0;
+        int computerWins = 0;
+        while (playerWins < 2 && computerWins < 2)
+        {
+            Console.WriteLine("=== Rock Paper Scissors Lizard Spock ===");
+            Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
+            string playerChoice = GetPlayerChoice();
+            string computerChoice = GetComputerChoice();
 
+            Console.WriteLine();
+            Console.WriteLine($"You played:      {playerChoice}");
+            Console.WriteLine($"Computer played: {computerChoice}");
+            Console.WriteLine();
 
-        
-
-
-        string computerChoice = GetComputerChoice();
-
-        Console.WriteLine();
-        Console.WriteLine($"You played:      {playerChoice}");
-        Console.WriteLine($"Computer played: {computerChoice}");
-        Console.WriteLine();
-
-        string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+            string result = DetermineWinner(playerChoice, computerChoice);
+            Console.WriteLine(result);
+            if(result == "You win!")
+            {
+                playerWins++;
+            }
+            else if(result == "Computer wins!")
+            {
+                computerWins++;
+            }
+            else
+            {
+                continue;
+            }
+        }
     }
 
     // Prompts the player and returns their choice as a lowercase string.
