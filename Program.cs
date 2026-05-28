@@ -15,6 +15,11 @@ public class Program
         Console.WriteLine();
 
         string playerChoice = GetPlayerChoice();
+
+
+        
+
+
         string computerChoice = GetComputerChoice();
 
         Console.WriteLine();
@@ -30,9 +35,24 @@ public class Program
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
-        string input = Console.ReadLine() ?? "";
-        return input.Trim().ToLower();
+        while (true)
+        {
+            Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
+            string input = Console.ReadLine() ?? "";
+
+            input = input.Trim().ToLower();
+
+            if (input != "rock" && input != "paper" &&
+                input != "scissors" && input != "lizard"
+                && input != "spock")
+            {
+                Console.WriteLine("Invalid Input");
+            }
+            else
+            {
+                return input.Trim().ToLower();
+            }
+        }
     }
 
     // Picks rock, paper, or scissors at random for the computer.
@@ -56,7 +76,7 @@ public class Program
         bool playerWins =
             (player == "rock" && (computer == "scissors" || computer == "lizard")) ||
             (player == "paper" && (computer == "rock" || computer == "spock")) ||
-            (player == "scissor" && (computer == "paper" || computer == "lizard")) ||
+            (player == "scissors" && (computer == "paper" || computer == "lizard")) ||
             (player == "lizard" && (computer == "spock" || computer == "paper")) ||
             (player == "spock" && (computer == "scissors" || computer == "rock"))
             ;
