@@ -7,6 +7,13 @@
 
 namespace RpsWorkshop;
 
+// Enumeration for the option selection
+public enum Choice 
+{
+    Rock,
+    Paper,
+    Scissors
+}
 public class Program
 {
     private static Random random = new Random();
@@ -21,8 +28,8 @@ public class Program
 
         while(playerScore < 2 && computerScore < 2) 
         {
-            string playerChoice = GetPlayerChoice();
-            string computerChoice = GetComputerChoice();
+            Choice playerChoice = GetPlayerChoice();
+            Choice computerChoice = GetComputerChoice();
 
             Console.WriteLine();
             Console.WriteLine($"You played:      {playerChoice}");
@@ -67,32 +74,41 @@ public class Program
         Console.WriteLine($"Player: {playerScore} - Computer: {computerScore}");
     }
 
-    private static bool IsValidChoice(string validChoice)
+    private static bool IsValidChoice(Choice validChoice)
     {
-        return validChoice == "rock" || validChoice =="scissors" || validChoice == "paper";
+        return validChoice == Choice.Rock || validChoice == Choice.Scissors || validChoice == Choice.Paper;
     }
 
     // Prompts the player and returns their choice as a lowercase string.
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
-    private static string GetPlayerChoice()
+    private static Choice GetPlayerChoice()
     {
         while(true)
         {
             Console.Write("Enter your choice (rock, paper, scissors): ");
             string input = Console.ReadLine() ?? "";
             input = input.Trim().ToLower();
-            if (IsValidChoice(input))
+            
+            Choice choice = input switch 
             {
-                return input;
+                "rock" => Choice.Rock,
+                "scissors" => Choice.Scissors,
+                "paper" => Choice.Paper,
+                _ => (Choice)(-1)
+            };
+
+            if(choice != (Choice)(-1)) {
+                return choice;
             }
+
             Console.WriteLine("Invalid choice. Please try again.....");
         }
     }
 
     // Picks rock, paper, or scissors at random for the computer.
-    private static string GetComputerChoice()
+    private static Choice GetComputerChoice()
     {
-        string[] choices = { "rock", "paper", "scissors" };
+        Choice[] choices = { Choice.Rock, Choice.Paper, Choice.Scissors };
         // Random random = new Random();
         int index = random.Next(choices.Length);
         return choices[index];
@@ -117,7 +133,7 @@ public class Program
 
     // Returns a number either 1 or 2 depending on who wins the round.
     // This will help the porgram to increment the Score of the player/computer.
-    private static int NRoundsWinner(string player, string computer) 
+    private static int NRoundsWinner(Choice player, Choice computer) 
     {
         if(player == computer) 
         {
@@ -125,9 +141,9 @@ public class Program
         }
 
         bool winner = 
-            (player == "rock" && computer == "scissors") ||
-            (player == "scissors" && computer == "paper") ||
-            (player == "paper" && computer == "rock");
+            (player == Choice.Rock && computer == Choice.Scissors) ||
+            (player == Choice.Scissors && computer == Choice.Paper) ||
+            (player == Choice.Paper && computer == Choice.Rock);
 
         if(winner == true) {
             return 1;
