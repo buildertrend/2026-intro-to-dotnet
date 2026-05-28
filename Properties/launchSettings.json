@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RpsWorkshop": {
+      "commandName": "Project",
+      "commandLineArgs": "--cheat"
+    }
+  }
+}
