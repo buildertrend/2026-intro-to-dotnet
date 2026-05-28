@@ -9,6 +9,20 @@ namespace RpsWorkshop;
 
 public class Program
 {
+    private enum Choice
+    {
+        Rock,
+        Paper,
+        Scissors,
+    }
+
+    // Matrix to determine if the player's selected choice's win condition (the dict's value) corresponds to the computer choice
+    private Dictionary<Choice, Choice> WinMatrix = new Dictionary<Choice, Choice> {
+        {Choice.Rock, Choice.Scissors},
+        {Choice.Paper, Choice.Rock},
+        {Choice.Scissors, Choice.Paper},
+    };
+
     public static void Main()
     {
         const string WRITE_PATH = "./history.txt";
