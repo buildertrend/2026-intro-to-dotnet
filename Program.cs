@@ -13,7 +13,10 @@ public class Program
     {
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
-
+        int pcount=0;
+        int ccount=0;
+        int n=0;
+        while(n<3){
         string playerChoice = GetPlayerChoice();
         string computerChoice = GetComputerChoice();
 
@@ -24,6 +27,28 @@ public class Program
 
         string result = DetermineWinner(playerChoice, computerChoice);
         Console.WriteLine(result);
+        if (result=="You win!")
+        {
+            pcount+=1;
+        }
+        else if(result=="Computer Wins!")
+        {
+            ccount+=1;
+        }
+        n+=1;
+        }
+        if (pcount > ccount)
+        {
+            Console.WriteLine("Player wins best of 3");
+        }
+        else if (ccount > pcount)
+        {
+            Console.WriteLine("Computer wins best of 3");
+        }
+        else
+        {
+            Console.WriteLine("they were all ties");
+        }
     }
 
     // Prompts the player and returns their choice as a lowercase string.
@@ -33,7 +58,7 @@ public class Program
         
         Console.Write("Enter your choice (rock, paper, scissors): ");
         string input = Console.ReadLine() ?? "";
-        input.Trim().ToLower();
+        input=input.Trim().ToLower();
 
         bool a = false;
         while(a==false){
@@ -46,7 +71,7 @@ public class Program
                Console.WriteLine("Invalid input Try again");
                Console.Write("Enter your choice (rock, paper, scissors): ");
                input = Console.ReadLine() ?? "";
-               input.Trim().ToLower();
+               input=input.Trim().ToLower();
            
 
         }
