@@ -47,7 +47,7 @@ public class Program
         string result = DetermineWinner(playerChoice, computerChoice);
         Console.WriteLine(result + " This round...");
         File.AppendAllText(filepath, ", Result: " + result + "\n");
-        if(result.Equals("\n\nYou win!"))
+        if(result.Equals("You win!"))
         {
             playerWins+=1;
         }
@@ -87,7 +87,7 @@ public class Program
         bool success = int.TryParse(Console.ReadLine(), out int pick);
         while(!success)
         {
-            Console.WriteLine("Please enter a valid integer: ");
+            Console.WriteLine("\n\nPlease enter a valid integer: ");
             success = int.TryParse(Console.ReadLine(), out pick);
         }
         return pick;
@@ -99,7 +99,7 @@ public class Program
         {
             return true;
         }
-        Console.WriteLine("Please ensure your choice is spelled correctly with no extra symbols.");
+        Console.WriteLine("\nPlease ensure your choice is spelled correctly with no extra symbols.");
         return false;
         
     }
