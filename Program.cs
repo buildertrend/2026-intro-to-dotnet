@@ -6,15 +6,26 @@
 // Pick a feature from the README and go.
 
 namespace RpsWorkshop;
+using System.IO;
+using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 public class Program
 {
+    public static string filename= @"C:\repos\2026-intro-to-dotnet\history.txt";
+    public static int pcount=0;
+    public static int ccount=0;
+    public static int tie=0;
     public static void Main()
     {
+        
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
-        int pcount=0;
-        int ccount=0;
+        pcount=0;
+        ccount=0;
+        tie=0;
+        
         int n=0;
         while(n<3){
         string playerChoice = GetPlayerChoice();
@@ -26,15 +37,37 @@ public class Program
         Console.WriteLine();
 
         string result = DetermineWinner(playerChoice, computerChoice);
+        if (result=="You win!")
+            {
+                Console.ForegroundColor=ConsoleColor.Green;
+            }
+        else if (result=="Computer wins!")
+            {
+                Console.ForegroundColor=ConsoleColor.Red;
+            }
+            else
+            {
+                Console.ForegroundColor=ConsoleColor.Yellow;
+            }
         Console.WriteLine(result);
+        Console.ResetColor();
+        
         if (result=="You win!")
         {
             pcount+=1;
         }
-        else if(result=="Computer Wins!")
+        else if(result=="Computer wins!")
         {
             ccount+=1;
         }
+        else
+        {
+            tie+=1;
+        }
+        Console.WriteLine($"Score — You: {pcount}  Computer: {ccount}  Ties: {tie}");
+        string content=$"You picked {playerChoice}, Computer picked {computerChoice}, Result was {result} at {DateTime.UtcNow}";
+        File.AppendAllText(filename, content );
+        File.AppendAllText(filename, "\n");
         n+=1;
         }
         if (pcount > ccount)
@@ -47,7 +80,7 @@ public class Program
         }
         else
         {
-            Console.WriteLine("they were all ties");
+            Console.WriteLine("They were all ties");
         }
     }
 
@@ -66,6 +99,14 @@ public class Program
                  a=true;
                  return input.Trim().ToLower();
                 
+            }
+            else if (input == "stats")
+            {
+                Console.WriteLine($"W : {pcount} L: {ccount} T: {tie}");
+                Console.Write("Enter your choice (rock, paper, scissors): ");
+                input = Console.ReadLine() ?? "";
+                input=input.Trim().ToLower();
+
             }
             else{
                Console.WriteLine("Invalid input Try again");
