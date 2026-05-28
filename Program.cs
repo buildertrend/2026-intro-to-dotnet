@@ -9,21 +9,63 @@ namespace RpsWorkshop;
 
 public class Program
 {
+    static int wins = 0;
+    static int losses = 0;
+    static int ties = 0;
+
+    public enum Choices
+    {
+        Rock,
+        Paper,
+        Scissors
+    }
+
     public static void Main()
     {
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("===First to 3 Wins===");
         Console.WriteLine("=== Rock Paper Scissors ===");
-        Console.WriteLine();
+        Console.ResetColor();
+        while (wins < 3 && losses < 3)
+        {
+            Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice();
+            string playerChoice = GetPlayerChoice();
 
-        Console.WriteLine();
-        Console.WriteLine($"You played:      {playerChoice}");
-        Console.WriteLine($"Computer played: {computerChoice}");
-        Console.WriteLine();
+            if (playerChoice.ToLower() == "stats")
+            {
+                Console.WriteLine(getWLT());
+                Console.ResetColor(); // Color reset fix
+                continue;
+            }
+            Choices computerChoice = GetComputerChoice();
 
-        string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+            Console.WriteLine();
+            Console.WriteLine($"You played:      {playerChoice}");
+            Console.WriteLine($"Computer played: {computerChoice}");
+            Console.WriteLine();
+
+            string result = sendChoices(playerChoice, computerChoice);
+            Console.WriteLine(result);
+            Console.ResetColor();
+            string score = getWLT();
+            Console.WriteLine(score);
+            Console.ResetColor();
+        }
+        if (losses >= 3)
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White; // Color visibility fix
+            Console.WriteLine("Game Over, Computer Wins!");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Black; // Color visibility fix
+            Console.WriteLine("Game Over, You Win!");
+            Console.ResetColor();
+        }
     }
 
     // Prompts the player and returns their choice as a lowercase string.
@@ -36,27 +78,82 @@ public class Program
     }
 
     // Picks rock, paper, or scissors at random for the computer.
-    private static string GetComputerChoice()
+    private static Choices GetComputerChoice()
     {
-        string[] choices = { "rock", "paper", "scissors" };
+        Choices[] choices = { Choices.Rock, Choices.Paper, Choices.Scissors };
         Random random = new Random();
         int index = random.Next(choices.Length);
         return choices[index];
     }
 
     // Returns a string describing who won this round.
-    private static string DetermineWinner(string player, string computer)
+    private static string DetermineWinner(Choices? player, Choices computer)
     {
         if (player == computer)
         {
+            ties++;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
             return "It's a tie!";
         }
 
         bool playerWins =
-            (player == "rock" && computer == "scissors") ||
-            (player == "paper" && computer == "rock") ||
-            (player == "scissors" && computer == "paper");
+            (player == Choices.Rock && computer == Choices.Scissors) ||
+            (player == Choices.Paper && computer == Choices.Rock) ||
+            (player == Choices.Scissors && computer == Choices.Paper);
 
+        if (playerWins)
+        {
+            wins++;
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Black; // Color visibility fix
+        }
+        else
+        {
+            losses++;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White; // Color visibility fix
+        }
         return playerWins ? "You win!" : "Computer wins!";
     }
+
+    private static string getWLT()
+    {
+        if (wins == losses)
+        {
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+        }
+        else if (wins > losses)
+        {
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Black; // Color visibility fix
+        }
+        else
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White; // Color visibility fix
+        }
+        return $"Score: [Wins: {wins}]  [Losses: {losses}] [Ties: {ties}]";
+    }
+
+    private static string sendChoices(string player, Choices computerChoice)
+    {
+        string normalizedPlayer = player.Trim().ToLower();
+        Choices? playerChoice = normalizedPlayer switch
+        {
+            "rock" => Choices.Rock,
+            "paper" => Choices.Paper,
+            "scissors" => Choices.Scissors,
+            _ => null
+        };
+
+
+        if (playerChoice == null)
+        {
+            return "Invalid Choice. Try Again.";
+        }
+        return DetermineWinner(playerChoice, computerChoice);
+    }
+
 }
