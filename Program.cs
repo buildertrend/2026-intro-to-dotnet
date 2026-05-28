@@ -22,7 +22,21 @@ enum Choice
     Rock,
     Paper,
     Scissors,
+    Lizard,
+    Spock,
 }
+
+static class Constants
+{
+    public static readonly Dictionary<Choice, Choice[]> win = new Dictionary<Choice, Choice[]>
+    {
+        { Choice.Rock, new Choice[] { Choice.Paper, Choice.Spock } },
+        { Choice.Paper, new Choice[] { Choice.Scissors, Choice.Lizard } },
+        { Choice.Scissors, new Choice[] { Choice.Rock, Choice.Spock } },
+        { Choice.Lizard, new Choice[] { Choice.Rock, Choice.Scissors } },
+        { Choice.Spock, new Choice[] { Choice.Lizard, Choice.Paper } },
+    };
+};
 
 public class Program
 {
@@ -124,11 +138,11 @@ public class Program
     {
         while (true)
         {
-            Console.Write("Enter your choice (rock, paper, scissors): ");
+            Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
             string input = Console.ReadLine() ?? "";
             input = input.Trim().ToLower();
 
-            List<string> choices = new List<string> { "rock", "paper", "scissors" };
+            List<string> choices = new List<string> { "rock", "paper", "scissors", "lizard", "spock" };
             if (choices.Contains(input))
             {
                 return input switch
@@ -136,6 +150,8 @@ public class Program
                     "rock" => Choice.Rock,
                     "paper" => Choice.Paper,
                     "scissors" => Choice.Scissors,
+                    "lizard" => Choice.Lizard,
+                    "spock" => Choice.Spock,
                     _ => Choice.Rock // not possible
                 };
             }
@@ -145,26 +161,19 @@ public class Program
     // Picks rock, paper, or scissors at random for the computer.
     private static Choice GetComputerChoice(bool cheatEnabled, Choice playerChoice)
     {
-        Choice choice = Choice.Rock;
+        Choice[] choices;
         if (cheatEnabled)
         {
-            choice = playerChoice switch
-            {
-                Choice.Rock => Choice.Paper,
-                Choice.Paper => Choice.Scissors,
-                Choice.Scissors => Choice.Rock,
-                _ => Choice.Rock, // not possible but whatevs
-            };
+            choices = Constants.win[playerChoice];
         }
         else
         {
-            Choice[] choices = { Choice.Rock, Choice.Paper, Choice.Scissors };
-            Random random = new Random();
-            int index = random.Next(choices.Length);
-            choice = choices[index];
+            choices = new Choice[] { Choice.Rock, Choice.Paper, Choice.Scissors, Choice.Lizard, Choice.Spock };
         }
 
-        return choice;
+        Random random = new Random();
+        int index = random.Next(choices.Length);
+        return choices[index];
     }
 
     // Returns a string describing who won this round.
@@ -175,10 +184,7 @@ public class Program
             return GameOutcome.Tie;
         }
 
-        bool playerWins =
-            (player == Choice.Rock && computer == Choice.Scissors) ||
-            (player == Choice.Paper && computer == Choice.Rock) ||
-            (player == Choice.Scissors && computer == Choice.Paper);
+        bool playerWins = !Constants.win[player].Contains(computer);
 
         return playerWins ? GameOutcome.PlayerWin : GameOutcome.ComputerWin;
     }
