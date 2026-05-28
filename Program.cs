@@ -17,6 +17,13 @@ enum GameOutcome
     Tie,
 }
 
+enum Choice
+{
+    Rock,
+    Paper,
+    Scissors,
+}
+
 public class Program
 {
     public static void Main(string[] args)
@@ -68,8 +75,8 @@ public class Program
 
             Console.WriteLine();
 
-            string playerChoice = GetPlayerChoice();
-            string computerChoice = GetComputerChoice(cheatEnabled, playerChoice);
+            Choice playerChoice = GetPlayerChoice();
+            Choice computerChoice = GetComputerChoice(cheatEnabled, playerChoice);
 
             Console.WriteLine();
             Console.WriteLine($"You played:      {playerChoice}");
@@ -113,7 +120,7 @@ public class Program
     }
 
     // Prompts the player and returns their choice as a lowercase string.
-    private static string GetPlayerChoice()
+    private static Choice GetPlayerChoice()
     {
         while (true)
         {
@@ -124,28 +131,33 @@ public class Program
             List<string> choices = new List<string> { "rock", "paper", "scissors" };
             if (choices.Contains(input))
             {
-                return input;
+                return input switch
+                {
+                    "rock" => Choice.Rock,
+                    "paper" => Choice.Paper,
+                    "scissors" => Choice.Scissors,
+                    _ => Choice.Rock // not possible
+                };
             }
         }
     }
 
     // Picks rock, paper, or scissors at random for the computer.
-    private static string GetComputerChoice(bool cheatEnabled, string playerChoice)
+    private static Choice GetComputerChoice(bool cheatEnabled, Choice playerChoice)
     {
-        string choice = "";
+        Choice choice = Choice.Rock;
         if (cheatEnabled)
         {
             choice = playerChoice switch
             {
-                "rock" => "paper",
-                "paper" => "scissors",
-                "scissors" => "rock",
-                _ => "paper",
+                Choice.Rock => Choice.Paper,
+                Choice.Paper => Choice.Scissors,
+                Choice.Scissors => Choice.Rock,
             };
         }
         else
         {
-            string[] choices = { "rock", "paper", "scissors" };
+            Choice[] choices = { Choice.Rock, Choice.Paper, Choice.Scissors };
             Random random = new Random();
             int index = random.Next(choices.Length);
             choice = choices[index];
@@ -155,7 +167,7 @@ public class Program
     }
 
     // Returns a string describing who won this round.
-    private static GameOutcome DetermineWinner(string player, string computer)
+    private static GameOutcome DetermineWinner(Choice player, Choice computer)
     {
         if (player == computer)
         {
@@ -163,9 +175,9 @@ public class Program
         }
 
         bool playerWins =
-            (player == "rock" && computer == "scissors") ||
-            (player == "paper" && computer == "rock") ||
-            (player == "scissors" && computer == "paper");
+            (player == Choice.Rock && computer == Choice.Scissors) ||
+            (player == Choice.Paper && computer == Choice.Rock) ||
+            (player == Choice.Scissors && computer == Choice.Paper);
 
         return playerWins ? GameOutcome.PlayerWin : GameOutcome.ComputerWin;
     }
