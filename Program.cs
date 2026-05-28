@@ -31,9 +31,15 @@ public class Program
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static Choice GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
-        string input = Console.ReadLine() ?? "";
-        return inputToChoice(input.Trim().ToLower());
+        Choice choice = Choice.Unknown;
+        while (choice == Choice.Unknown)
+        {
+            Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
+            String input = Console.ReadLine() ?? "";
+            choice = inputToChoice(input.Trim().ToLower());
+            if (choice == Choice.Unknown) { Console.WriteLine("\nInvalid Input, Please Try Again"); }
+        }
+        return choice;
     }
 
     // Picks rock, paper, scissors, lizard, or spock at random for the computer.
