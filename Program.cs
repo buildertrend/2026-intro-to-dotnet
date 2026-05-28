@@ -77,7 +77,7 @@ public class Program
     }
 
     // Returns a string describing who won this round.
-    private static string DetermineWinner(Choices? player, Choices? computer)
+    private static string DetermineWinner(Choices? player, Choices computer)
     {
         if (player == computer)
         {
@@ -109,7 +109,8 @@ public class Program
 
    private static string sendChoices(string player, string computer)
     {
-        Choices? playerChoice = player switch
+        string normalizedPlayer = player.Trim().ToLower();
+        Choices? playerChoice = normalizedPlayer switch
         {
             "rock" => Choices.Rock,
             "paper" => Choices.Paper,
@@ -117,14 +118,17 @@ public class Program
             _ => null
         };
 
-        Choices? computerChoice = computer switch
+        Choices computerChoice = computer switch
         {
             "rock" => Choices.Rock,
             "paper" => Choices.Paper,
             "scissors" => Choices.Scissors,
-            _ => null
         };
 
+        if(playerChoice == null)
+        {
+            return "Invalid Choice. Try Again.";
+        }
         return DetermineWinner(playerChoice, computerChoice);
     }
 
