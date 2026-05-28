@@ -6,10 +6,12 @@
 // Pick a feature from the README and go.
 
 using System.Data.SqlTypes;
+using System;
+using System.IO;
 
 namespace RpsWorkshop;
 
-enum Choice
+public enum Choice
 {
     Rock,
     Paper,
@@ -66,20 +68,46 @@ public class Program
             i--;
             Console.WriteLine("Tied round, adding another round...");
         }
+        updateRoundHistory(playerChoice, computerChoice, result);
         }
 
+        bestOfRounds(userScore, computerScore, rounds);
+
+    }
+
+    public static void updateRoundHistory(Choice playerChoice, Choice computerChoice, string result){
+
+        string path = "history.txt";
+        string line = $"{DateTime.Now} | Player: {playerChoice} | Computer: {computerChoice} | Result: {result}";
+        File.AppendAllText(path, line + Environment.NewLine);
+    }
+
+    public static void updateBestOfHistory(string winMessage){
+
+        string path = "history.txt";
+        File.AppendAllText(path, winMessage + Environment.NewLine);
+    }
+
+
+    public static void bestOfRounds(int userScore, int computerScore, int rounds) {
         if(userScore > computerScore){
+            string winMessage = $"You won best out of {rounds} rounds.";
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("You won best out of " + rounds + " rounds!");
+            Console.WriteLine(winMessage);
             Console.ForegroundColor = ConsoleColor.White;
+            updateBestOfHistory(winMessage);
         } else if (computerScore > userScore){
+            string winMessage = $"Computer won best out of {rounds} rounds.";
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Computer won best out of " + rounds + " rounds!");
+            Console.WriteLine(winMessage);
             Console.ForegroundColor = ConsoleColor.White;
+            updateBestOfHistory(winMessage);
         } else {
+            string winMessage = $"It's a tie out of {rounds} rounds!";
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("It's a tie!");
+            Console.WriteLine(winMessage);
             Console.ForegroundColor = ConsoleColor.White;
+            updateBestOfHistory(winMessage);
         }
 
     }
