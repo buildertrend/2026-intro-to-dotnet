@@ -13,11 +13,11 @@ public class Program
 {
     public static void Main()
     {
-        
+        int n = getNumRounds();
         int playerWins = 0;
         int computerWins = 0;
         int ties = 0;
-        while (playerWins < 2 && computerWins < 2)
+        while (playerWins < n && computerWins < n)
         {
             Console.WriteLine("=== Rock Paper Scissors Lizard Spock ===");
             Console.WriteLine();
@@ -68,6 +68,31 @@ public class Program
             else
             {
                 return input.Trim().ToLower();
+            }
+        }
+    }
+
+    private static int getNumRounds()
+    {
+        while (true)
+        {
+            Console.Write("First to: ");
+            string input = Console.ReadLine() ?? "";
+            try
+            {
+                int num = Int32.Parse(input);
+                if (num <= 0)
+                {
+                    Console.WriteLine("Invalid Input");
+                }
+                else
+                {
+                    return num;
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Input was not a number");
             }
         }
     }
