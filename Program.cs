@@ -33,8 +33,8 @@ public class Program
         {
             Console.Write("Enter your choice (rock, paper, scissors): ");
             string input = Console.ReadLine() ?? "";
+            input = input.Trim().ToLower();
 
-            input.Trim().ToLower();
             List<string> choices = new List<string> { "rock", "paper", "scissors" };
             if (choices.Contains(input))
             {
