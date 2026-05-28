@@ -43,17 +43,25 @@ public class Program
         Choice computerChoice = GetComputerChoice();
 
         Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"You played:      {playerChoice}");
+        Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine($"Computer played: {computerChoice}");
+        Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine();
 
         string result = DetermineWinner(playerChoice, computerChoice);
         UpdateScore(result);
         Console.WriteLine(result);
         Console.WriteLine("Scores:");
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("You: " + userScore);
+        Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine("Computer: " + computerScore);
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("Ties: " + ties);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine();
         if(result.Contains("tie")){
             i--;
             Console.WriteLine("Tied round, adding another round...");
