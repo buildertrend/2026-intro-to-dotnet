@@ -5,40 +5,109 @@
 //
 // Pick a feature from the README and go.
 
+using System.Runtime.Versioning;
+
 namespace RpsWorkshop;
 
 public class Program
 {
     public static void Main()
     {
+        int playerWins = 0;
+        int computerWins = 0;
+        int totalTies = 0;
+        
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice();
+        Console.WriteLine("How many rounds do you want to play?: ");
+        string rounds = Console.ReadLine() ?? "1";
 
-        Console.WriteLine();
-        Console.WriteLine($"You played:      {playerChoice}");
-        Console.WriteLine($"Computer played: {computerChoice}");
-        Console.WriteLine();
+        if (int.TryParse(rounds, out int result))
+        {
+            Console.WriteLine($"Got it! Starting round 1 of {result}");
+        } else {
+            Console.WriteLine("That's not a number, silly...");
+        }
 
-        string result = DetermineWinner(playerChoice, computerChoice);
-        Console.WriteLine(result);
+        for (int i = 0; i < result; i++)
+        {
+            string playerChoice = GetPlayerChoice();
+            string computerChoice = GetComputerChoice();
+
+            Console.WriteLine();
+            Console.WriteLine($"You played:      {playerChoice}");
+            Console.WriteLine($"Computer played: {computerChoice}");
+            Console.WriteLine();
+
+            string winner = DetermineWinner(playerChoice, computerChoice);
+
+            if (winner.Equals("You win!")) {
+                Console.ForegroundColor = ConsoleColor.Green;
+                playerWins++;
+            } else if (winner.Equals("It's a tie!")) {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                totalTies++;
+            } else {
+                Console.ForegroundColor = ConsoleColor.Red;
+                computerWins++;
+            }
+
+            Console.WriteLine(winner);
+            Console.ResetColor();
+            
+            Console.WriteLine($"Score — You:{playerWins}   Computer: {computerWins}  Ties: {totalTies}");
+
+        }
+
+        if (playerWins > computerWins)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine("Player wins! Congratulations!");
+        } else if (computerWins > playerWins)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("Computer wins! Better luck next time...");
+        } else
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("Looks like a wash!");
+        }
+
+        Console.ResetColor();
     }
 
     // Prompts the player and returns their choice as a lowercase string.
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors): ");
+        Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
         string input = Console.ReadLine() ?? "";
-        return input.Trim().ToLower();
+
+        bool valid = false;
+        input = input.Trim().ToLower(); 
+
+        while (!valid) {
+
+            if (String.Equals(input, "paper") || String.Equals(input, "scissors") || String.Equals(input, "rock") || String.Equals(input, "lizard") || String.Equals(input, "spock"))
+            {
+                break;
+            }
+
+            Console.Write("That's not an option, silly! Try again. ");
+            Console.WriteLine();
+            Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
+            input = Console.ReadLine() ?? "";
+            input = input.Trim().ToLower();
+        }
+
+        return input;
     }
 
     // Picks rock, paper, or scissors at random for the computer.
     private static string GetComputerChoice()
     {
-        string[] choices = { "rock", "paper", "scissors" };
+        string[] choices = { "rock", "paper", "scissors", "lizard", "spock" };
         Random random = new Random();
         int index = random.Next(choices.Length);
         return choices[index];
@@ -55,7 +124,14 @@ public class Program
         bool playerWins =
             (player == "rock" && computer == "scissors") ||
             (player == "paper" && computer == "rock") ||
-            (player == "scissors" && computer == "paper");
+            (player == "scissors" && computer == "paper") ||
+            (player == "rock" && computer == "lizard") ||
+            (player == "lizard" && computer == "spock") ||
+            (player == "spock" && computer == "scissors") ||
+            (player == "scissors" && computer == "lizard") ||
+            (player == "lizard" && computer == "paper") ||
+            (player == "paper" && computer == "spock") ||
+            (player == "spock" && computer == "rock");
 
         return playerWins ? "You win!" : "Computer wins!";
     }
