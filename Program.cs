@@ -17,8 +17,11 @@ public class Program
         int playerWins = 0;
         int computerWins = 0;
         int ties = 0;
+        DateTime now = DateTime.Now;
         while (playerWins < n && computerWins < n)
         {
+
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("=== Rock Paper Scissors Lizard Spock ===");
             Console.WriteLine();
 
@@ -26,7 +29,9 @@ public class Program
             string computerChoice = GetComputerChoice();
 
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"You played:      {playerChoice}");
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"Computer played: {computerChoice}");
             Console.WriteLine();
 
@@ -44,11 +49,21 @@ public class Program
             {
                 ties++;
             }
-            Console.WriteLine($"\nScore:\n You: {playerWins} \n Computer: {computerWins} \n Ties: {ties}");
+
+            Console.WriteLine($"\nScore: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"You: {playerWins} ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Computer: {computerWins} "); 
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine($"Ties: {ties}");
+            now = DateTime.Now;
+            File.AppendAllText("C:/repos/2026-intro-to-dotnet/history.txt", $"{now} You: {playerChoice} Computer: {computerChoice} {result}\n");
         }
     }
 
-    // Prompts the player and returns their choice as a lowercase string.
+    // Prompts the player and returns their choi
+    // ce as a lowercase string.
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
