@@ -18,7 +18,7 @@ public class Program
 
         Console.WriteLine("How many rounds do you want to play?: ");
         string rounds = Console.ReadLine() ?? "1";
-        
+
         if (int.TryParse(rounds, out int result))
         {
             Console.WriteLine($"Got it! Starting round 1 of {result}");
@@ -37,7 +37,18 @@ public class Program
             Console.WriteLine();
 
             string winner = DetermineWinner(playerChoice, computerChoice);
+
+            if (winner.Equals("You win!")) {
+                Console.ForegroundColor = ConsoleColor.Green;
+            } else if (winner.Equals("It's a tie!")) {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            } else {
+                Console.ForegroundColor = ConsoleColor.Red;
+            }
+
             Console.WriteLine(winner);
+            Console.ResetColor();
+
         }
     }
 
