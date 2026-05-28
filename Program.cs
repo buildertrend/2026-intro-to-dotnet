@@ -12,7 +12,8 @@ public class Program
 {
 
     public static string filepath = "history.txt";
-
+    public static int playerWins = 0;
+    public static int computerWins = 0;
     public static void Main()
     {
         string time = DateTime.Now.ToString();
@@ -23,8 +24,7 @@ public class Program
         Console.Write("How many rounds do you wish to play?: ");
         int N = GetNumberOfRounds();
         int win = (N/2) + 1;
-        int playerWins = 0;
-        int computerWins = 0;
+        
 
         while((playerWins < win) && (computerWins < win))
        {
@@ -46,6 +46,7 @@ public class Program
 
         string result = DetermineWinner(playerChoice, computerChoice);
         Console.WriteLine(result + " This round...");
+        Console.ResetColor();
         File.AppendAllText(filepath, ", Result: " + result + "\n");
         if(result.Equals("You win!"))
         {
@@ -58,8 +59,16 @@ public class Program
         Console.WriteLine($"Your Wins: {playerWins}  Computer Wins: {computerWins}   Out of {N} rounds");
        } 
        string winner = (playerWins == win) ? "Player" : "Computer";
+       if(winner.Equals("Player"))
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
        Console.WriteLine($"{winner} wins the game!");
-
+       Console.ResetColor();
         
     }
 
@@ -99,7 +108,15 @@ public class Program
         {
             return true;
         }
-        Console.WriteLine("\nPlease ensure your choice is spelled correctly with no extra symbols.");
+        else if (input == "stats")
+        {
+            Console.WriteLine($"Your Wins: {playerWins}  Computer Wins: {computerWins}");
+        } 
+        else
+        {
+            Console.WriteLine("\nPlease ensure your choice is spelled correctly with no extra symbols.");
+        }
+        
         return false;
         
     }
@@ -109,6 +126,7 @@ public class Program
     {
         if (player == computer)
         {
+            Console.ForegroundColor = ConsoleColor.Blue;
             return "It's a tie!";
         }
 
@@ -116,6 +134,15 @@ public class Program
             (player == "rock" && computer == "scissors") ||
             (player == "paper" && computer == "rock") ||
             (player == "scissors" && computer == "paper");
+
+        if(playerWins)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
 
         return playerWins ? "You win!" : "Computer wins!";
     }
