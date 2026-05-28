@@ -18,9 +18,21 @@ public class Program
 {
     public static void Main()
     {
+        List<string> VALIDINPUTS = new List<string> { "1", "2" };
+        string message = "\n1.) Play\n2.) Quit\n\nPress your number and hit enter!\n";
+        string repeatMessage = "\nInvalid input. Try again\n\n1.) Play\n2.) Quit\n\nPress your number and hit enter!";
         Console.WriteLine("=== Rock Paper Scissors ===");
-        Console.WriteLine();
+        string input = getInput(message,repeatMessage,VALIDINPUTS);
+        while(input == "1")
+        {
+            gameLoop();
+            input = getInput(message, repeatMessage, VALIDINPUTS);
+        }
+        
+    }
 
+    private static void gameLoop()
+    {
         Move playerChoice = GetPlayerChoice();
         Move computerChoice = GetComputerChoice();
 
@@ -33,25 +45,14 @@ public class Program
         Console.WriteLine(result);
     }
 
-    // Prompts the player and returns their choice as a lowercase string.
-    // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
+    // Prompts the player and returns their choice as a lowercase string. Retrys if invalid input.
     private static Move GetPlayerChoice()
     {
-        Move enumMove = Move.unknown;
-        bool repeat = false;
-        while (enumMove == Move.unknown) {
-            if (repeat)
-            {
-                Console.Write("Invalid input. Enter your choice (rock, paper, scissors): ");
-            } else
-            {
-                Console.Write("Enter your choice (rock, paper, scissors): ");
-                repeat = true;
-            }
-            string input = Console.ReadLine() ?? "";
-            string move = input.Trim().ToLower();
-            enumMove = stringToMove(move);
-    }
+        string input = getInput("Enter your choice (rock, paper, scissors): ",
+            "Invalid input. Enter your choice (rock, paper, scissors): ",new List<string> { "rock","paper","scissors"});
+            
+        string move = input.Trim().ToLower();
+        Move enumMove = stringToMove(move);
         return enumMove;
     }
 
@@ -65,6 +66,7 @@ public class Program
         return stringToMove(move);
     }
 
+    //converts string input to Enum. returns unknown if not valid input.
     private static Move stringToMove(string input)
     {
         Move move = input switch
@@ -91,5 +93,18 @@ public class Program
             (player == Move.scissors && computer == Move.paper);
 
         return playerWins ? "You win!" : "Computer wins!";
+    }
+
+    //basic input validation
+    private static string getInput(string message, string repeatMessage, List<string> validInputs)
+    {
+        Console.WriteLine(message);
+        string input = Console.ReadLine() ?? "";
+        while (!validInputs.Contains(input))
+        {
+            Console.WriteLine(repeatMessage);
+            input = Console.ReadLine() ?? "";
+        }
+        return input;
     }
 }
