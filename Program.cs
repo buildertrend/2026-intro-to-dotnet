@@ -40,30 +40,22 @@ public class Program
         if (result=="You win!")
             {
                 Console.ForegroundColor=ConsoleColor.Green;
+                pcount+=1;
             }
         else if (result=="Computer wins!")
             {
                 Console.ForegroundColor=ConsoleColor.Red;
+                ccount+=1;
             }
             else
             {
                 Console.ForegroundColor=ConsoleColor.Yellow;
+                tie+=1;
             }
         Console.WriteLine(result);
         Console.ResetColor();
         
-        if (result=="You win!")
-        {
-            pcount+=1;
-        }
-        else if(result=="Computer wins!")
-        {
-            ccount+=1;
-        }
-        else
-        {
-            tie+=1;
-        }
+       
         Console.WriteLine($"Score — You: {pcount}  Computer: {ccount}  Ties: {tie}");
         string content=$"You picked {playerChoice}, Computer picked {computerChoice}, Result was {result} at {DateTime.UtcNow}";
         File.AppendAllText(filename, content );
