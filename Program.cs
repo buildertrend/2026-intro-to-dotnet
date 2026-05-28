@@ -7,6 +7,9 @@
 
 namespace RpsWorkshop;
 
+using System;
+using System.IO;
+
 public enum Move{
         unknown,
         rock,
@@ -16,22 +19,39 @@ public enum Move{
 
 public class Program
 {
+    public const string STATSFILEPATH = "stats.txt";
     public static void Main()
     {
-        List<string> VALIDINPUTS = new List<string> { "1", "2" };
-        string message = "\n1.) Play\n2.) Quit\n\nPress your number and hit enter!\n";
-        string repeatMessage = "\nInvalid input. Try again\n\n1.) Play\n2.) Quit\n\nPress your number and hit enter!";
+        List<string> VALIDINPUTS = new List<string> { "1", "2", "3" };
+        string message = "\n1.) Play\n2.) Quit\n3.) Stats\n\nPress your number and hit enter!\n";
+        string repeatMessage = "\nInvalid input. Try again\n\n1.) Play\n2.) Quit\n3.) Stats\n\nPress your number and hit enter!";
         Console.WriteLine("=== Rock Paper Scissors ===");
         string input = getInput(message,repeatMessage,VALIDINPUTS);
-        while(input == "1")
+
+        while(input != "2")
         {
-            gameLoop();
+            if (input == "1")
+            {
+                roundLoop();
+            }
+            if(input == "3")
+            {
+                printStats();
+            }
             input = getInput(message, repeatMessage, VALIDINPUTS);
         }
+
         
     }
 
-    private static void gameLoop()
+    private static void printStats()
+    {
+        string fileContent = File.ReadAllText(STATSFILEPATH);
+        Console.WriteLine("Stats: Wins-Losses-Ties");
+        Console.WriteLine(fileContent);
+    }
+
+    private static void roundLoop()
     {
         Move playerChoice = GetPlayerChoice();
         Move computerChoice = GetComputerChoice();
@@ -82,17 +102,57 @@ public class Program
     // Returns a string describing who won this round.
     private static string DetermineWinner(Move player, Move computer)
     {
-        if (player == computer)
+        int playerWinCount = 0;
+        int playerLossCount = 0;
+        int playerTieCount = 0;
+
+        if (File.Exists(STATSFILEPATH))
         {
-            return "It's a tie!";
+            string fileContent = File.ReadAllText(STATSFILEPATH);
+            using (StringReader reader = new StringReader(fileContent))
+            {
+                string? line;
+                line = reader.ReadLine();
+                playerWinCount = int.Parse(line);
+                line = reader.ReadLine();
+                playerLossCount = int.Parse(line);
+                line = reader.ReadLine();
+                playerTieCount = int.Parse(line);
+            }
         }
 
-        bool playerWins =
-            (player == Move.rock && computer == Move.scissors) ||
-            (player == Move.paper && computer == Move.rock) ||
-            (player == Move.scissors && computer == Move.paper);
+            if (player == computer)
+            {
+                playerTieCount++;
+                updateStats(playerWinCount, playerLossCount, playerTieCount);
+                return "It's a tie!";
+            }
 
-        return playerWins ? "You win!" : "Computer wins!";
+            bool playerWins =
+                (player == Move.rock && computer == Move.scissors) ||
+                (player == Move.paper && computer == Move.rock) ||
+                (player == Move.scissors && computer == Move.paper);
+
+
+
+            if (playerWins)
+            {
+                playerWinCount++;
+                updateStats(playerWinCount, playerLossCount, playerTieCount);
+            }
+            else
+            {
+                playerLossCount++;
+                updateStats(playerWinCount, playerLossCount, playerTieCount);
+            }
+
+            return playerWins ? "You win!" : "Computer wins!";
+        }
+
+    private static void updateStats(int w, int l, int t)
+    {
+        string stats = $"{w}\n{l}\n{t}";
+        File.WriteAllText(STATSFILEPATH, stats);
     }
 
     //basic input validation
