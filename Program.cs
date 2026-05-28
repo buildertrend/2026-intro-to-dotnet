@@ -10,13 +10,22 @@ namespace RpsWorkshop;
 public class Program
 {
     public enum Choice { Unknown, Rock, Paper, Scissors, Lizard, Spock }
-    public static void Main()
+    public static void Main(string[] args)
     {
         Console.WriteLine("=== Rock Paper Scissors Lizard Spock ===");
         Console.WriteLine();
 
         Choice playerChoice = GetPlayerChoice();
-        Choice computerChoice = GetComputerChoice();
+
+        Choice computerChoice;
+        if (args.Length >= 0 && args[0] == "--cheat")
+        {
+            computerChoice = GetComputerChoice(playerChoice);
+        }
+        else
+        {
+            computerChoice = GetComputerChoice();
+        }
 
         Console.WriteLine();
         Console.WriteLine($"You played:      {playerChoice}");
@@ -51,6 +60,12 @@ public class Program
         return inputToChoice(choices[index]);
     }
 
+    // Picks rock, paper, scissors, lizard, or spock based on previous player move.
+    private static Choice GetComputerChoice(Choice playerChoice)
+    {
+        return getWinningChoice(playerChoice);
+    }
+
     // Returns a string describing who won this round.
     private static string DetermineWinner(Choice player, Choice computer)
     {
@@ -69,7 +84,7 @@ public class Program
         return playerWins ? "You win!" : "Computer wins!";
     }
     
-    public static Choice inputToChoice(String input)
+    private static Choice inputToChoice(String input)
     {
         Choice choice = input switch
         {
@@ -82,5 +97,17 @@ public class Program
         };
 
         return choice;
+    }
+
+    private static Choice getWinningChoice(Choice playerChoice)
+    {
+        switch (playerChoice) {
+            case Choice.Rock: return Choice.Paper;
+            case Choice.Paper:  return Choice.Scissors;
+            case Choice.Scissors: return Choice.Spock;
+            case Choice.Lizard: return Choice.Rock;
+            case Choice.Spock: return Choice.Lizard;
+            default : return Choice.Unknown;
+        };
     }
 }
