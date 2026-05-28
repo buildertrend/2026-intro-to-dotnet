@@ -153,6 +153,7 @@ public class Program
                 Choice.Rock => Choice.Paper,
                 Choice.Paper => Choice.Scissors,
                 Choice.Scissors => Choice.Rock,
+                _ => Choice.Rock, // not possible but whatevs
             };
         }
         else
