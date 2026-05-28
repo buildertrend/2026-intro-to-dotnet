@@ -10,9 +10,11 @@ using System.IO;
 
 public class Program
 {
+
+    public static string filepath = "history.txt";
+
     public static void Main()
     {
-        string filepath = "history.txt";
         string time = DateTime.Now.ToString();
 
         Console.WriteLine("=== Rock Paper Scissors ===");
