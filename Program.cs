@@ -93,11 +93,11 @@ public class Program
         string input = Console.ReadLine() ?? "";
         input=input.Trim().ToLower();
 
-        bool a = false;
-        while(a==false){
+        
+        while(true){
             if(input=="rock"||input=="paper"||input=="scissors"){
-                 a=true;
                  return input.Trim().ToLower();
+                 
                 
             }
             else if (input == "stats")
