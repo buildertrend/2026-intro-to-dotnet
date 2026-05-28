@@ -28,16 +28,22 @@ public class Program
 
         try
         {
-            using (StreamWriter sw = new StreamWriter(WRITE_PATH, append: true))
-            {
-                sw.WriteLine($"Timestamp: {System.DateTime.Now}, Player Choice: {playerChoice}, Computer Choice: {computerChoice}, Result: {result}");
-            }
+            AppendToFile(WRITE_PATH, playerChoice, computerChoice, result);
         }
         catch (Exception ex) 
         { 
-            Console.WriteLine($"{ex.Message}");
+            Console.WriteLine($"File append could not be performed: {ex.Message}");
         }
         Console.WriteLine(result);
+    }
+
+    // Writes a single line to file given filepath, the player and computer's choice, and the result of the match
+    private static void AppendToFile(string filepath, string playerChoice, string computerChoice, string result)
+    {
+        using (StreamWriter sw = new StreamWriter(filepath, append: true))
+        {
+            sw.WriteLine($"Timestamp: {System.DateTime.Now}, Player Choice: {playerChoice}, Computer Choice: {computerChoice}, Result: {result}");
+        }
     }
 
     // Prompts the player and returns their choice as a lowercase string.
