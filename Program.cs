@@ -12,8 +12,10 @@ public class Program
 {
 
     public static string filepath = "history.txt";
+    public static string statsFilePath = "stats.txt";
     public static int playerWins = 0;
     public static int computerWins = 0;
+    public static int roundTies = 0;
     public static void Main()
     {
         string time = DateTime.Now.ToString();
@@ -51,12 +53,18 @@ public class Program
         if(result.Equals("You win!"))
         {
             playerWins+=1;
+            EditStats(statsFilePath, "playerWin");
         }
         else if(result.Equals("Computer wins!"))
         {
             computerWins+=1;
+            EditStats(statsFilePath, "playerLoss");
         }
-        Console.WriteLine($"Your Wins: {playerWins}  Computer Wins: {computerWins}   Out of {N} rounds");
+        else{
+            roundTies+=1;
+            EditStats(statsFilePath, "tie");
+        }
+        Console.WriteLine($"Your Wins: {playerWins}  Computer Wins: {computerWins}  Ties: {roundTies}  Out of {N} rounds");
        } 
        string winner = (playerWins == win) ? "Player" : "Computer";
        if(winner.Equals("Player"))
@@ -110,7 +118,8 @@ public class Program
         }
         else if (input == "stats")
         {
-            Console.WriteLine($"Your Wins: {playerWins}  Computer Wins: {computerWins}");
+            var (wins, losses, ties) = ReadStats(statsFilePath);
+            Console.WriteLine($"Your Wins: {wins}  Computer Wins: {losses}  Ties: {ties}\n\n");
         } 
         else
         {
@@ -120,6 +129,51 @@ public class Program
         return false;
         
     }
+
+    //Initializes a stats.txt if it does not yet exist.
+    private static void InitializeStats(string statsFilePath)
+    {
+        if(!File.Exists(statsFilePath))
+        {
+            File.WriteAllText(statsFilePath, "0,0,0");
+        }
+    }
+
+    //Reads the values of the stats file. Wins,Losses,Ties.
+    private static (int wins, int losses, int ties) ReadStats(string statsFilePath)
+    {
+        InitializeStats(statsFilePath);
+        string line = File.ReadAllText(statsFilePath).Trim();
+        string[] parts = line.Split(',');
+
+        int wins = int.Parse(parts[0]);
+        int losses = int.Parse(parts[1]);
+        int ties = int.Parse(parts[2]);
+
+        return (wins, losses, ties);
+    }
+
+    //Edits the value of the stats.txt file corresponding to the result of the round.
+    private static void EditStats(string statsFilePath, string result)
+    {
+        InitializeStats(statsFilePath);
+        var (wins, losses, ties) = ReadStats(statsFilePath);
+        switch (result)
+        {
+            case "playerWin":
+                wins+=1;
+                break;
+            case "playerLoss":
+                losses+=1;
+                break;
+            case "tie":
+                ties+=1;
+                break;
+        }
+
+        File.WriteAllText(statsFilePath, $"{wins},{losses},{ties}");
+    }
+
 
     // Returns a string describing who won this round.
     private static string DetermineWinner(string player, string computer)
