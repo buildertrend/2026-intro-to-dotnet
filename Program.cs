@@ -5,12 +5,25 @@
 //
 // Pick a feature from the README and go.
 
+using System.ComponentModel;
+using System.IO.Pipes;
+
 namespace RpsWorkshop;
 
 public class Program
 {
     public static void Main()
     {
+
+        Console.Write("How many rounds do you want to play? ");
+        var rounds = int.Parse(Console.ReadLine() ?? "1");
+        var playerWins = 0;
+        var computerWins =0;
+        var tieWins =0;
+        
+
+        for (int i =0; i< rounds; i++)
+        {
         Console.WriteLine("=== Rock Paper Scissors ===");
         Console.WriteLine();
 
@@ -24,6 +37,43 @@ public class Program
 
         string result = DetermineWinner(playerChoice, computerChoice);
         Console.WriteLine(result);
+
+        if(result == "You win!")
+            {
+                playerWins++;
+                
+            }
+        else if(result == "Computer wins!")
+            {
+                computerWins++;
+
+            }
+            else
+            {
+                tieWins++;
+            }
+        Console.Write("Score- You: "+playerWins+ " Computer: "+computerWins+" Tie: "+tieWins+"\r\n");
+            
+
+        }
+        if (playerWins > computerWins)
+        {
+            Console.Write("Overall: You win!");
+
+        }
+        else if(playerWins<computerWins)
+        {
+            Console.Write("Overall: Computer Wins!");
+        }
+        else
+        {
+            Console.Write("Overall: It is a tie!");
+        }
+     
+        
+
+
+       
     }
 
     // Prompts the player and returns their choice as a lowercase string.
@@ -32,7 +82,22 @@ public class Program
     {
         Console.Write("Enter your choice (rock, paper, scissors): ");
         string input = Console.ReadLine() ?? "";
-        return input.Trim().ToLower();
+        bool a = true;
+
+        while(a){
+            if(input == "rock" || input == "paper" || input == "scissors"){
+                a = false;
+                return input.Trim().ToLower();
+            }
+            else{
+                Console.Write("Invalid choice. Please enter rock, paper, or scissors: ");
+                input = Console.ReadLine() ?? "";
+            }
+        }
+        return null;
+
+
+        
     }
 
     // Picks rock, paper, or scissors at random for the computer.
@@ -53,10 +118,23 @@ public class Program
         }
 
         bool playerWins =
-            (player == "rock" && computer == "scissors") ||
+            (player =="rock" && computer == "scissors") ||
             (player == "paper" && computer == "rock") ||
             (player == "scissors" && computer == "paper");
 
+
+
         return playerWins ? "You win!" : "Computer wins!";
     }
+
+    public enum Choices{
+        Rock,
+        Paper,
+        Scissors
+
+    }
+
+
+
+
 }
