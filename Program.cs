@@ -55,7 +55,7 @@ public class Program
         // win choice decision for rock paper scissors lizard spock
         bool playerWins =
             (player == "rock" && (computer == "scissors" || computer == "lizard")) ||
-            (player == "paper" && computer == "rock" || computer == "spock") ||
+            (player == "paper" && (computer == "rock" || computer == "spock")) ||
             (player == "scissor" && (computer == "paper" || computer == "lizard")) ||
             (player == "lizard" && (computer == "spock" || computer == "paper")) ||
             (player == "spock" && (computer == "scissors" || computer == "rock"))
