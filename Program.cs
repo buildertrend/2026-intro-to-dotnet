@@ -29,6 +29,7 @@ public class Program
     public static void Main()
     {
         const string WRITE_PATH = "./history.txt";
+        const string SAVE_FILE_PATH = "./save.txt";
         List<string> resultMessages = new List<string> { "You win!", "Computer wins!", "It's a tie!" };
 
         int wins = 0;
@@ -50,6 +51,38 @@ public class Program
             // Simple player exit check
             if (playerChoice == "exit") break;
 
+            // Player chooses to load
+            if (playerChoice == "load")
+            {
+                Console.WriteLine();
+                Console.WriteLine("Loading file into scoreboard...");
+                Console.WriteLine();
+                try
+                {
+                    using (StreamReader sr = new StreamReader(SAVE_FILE_PATH))
+                    {
+                        // There is just one line for save data information
+                        string saveLine = sr.ReadLine();
+                        if (saveLine != null)
+                        {
+                            string[] infoArr = saveLine.Split(new char[] { ' ' });
+                            if (infoArr.Length == 3)
+                            {
+                                wins = int.Parse(infoArr[0]);
+                                losses = int.Parse(infoArr[1]);
+                                ties = int.Parse(infoArr[2]);
+                                continue;
+                            }
+                            else { Console.Write("No save data found."); continue; }
+                        }
+                        else
+                        {
+                            Console.Write("No save data found.");
+                            continue;
+                        }
+                    }
+                } catch (Exception ex) { Console.WriteLine("No save data created yet."); continue; }
+            }
             Choice playerChoiceEnum = playerChoice switch
             {
                 "rock" => Choice.Rock,
@@ -87,9 +120,9 @@ public class Program
             Console.WriteLine();
 
             int resultInt = DetermineWinner(playerChoiceEnum, computerChoiceEnum);
-
             string result = resultMessages[resultInt];
 
+            // History file write
             try
             {
                 AppendToFile(WRITE_PATH, playerChoice, computerChoice, result);
@@ -98,7 +131,7 @@ public class Program
             {
                 Console.WriteLine($"File append could not be performed: {ex.Message}");
             }
-
+            
             // Switch on results for scoreboard
             switch (resultInt)
             {
@@ -118,6 +151,19 @@ public class Program
             Console.WriteLine(result);
             Console.ForegroundColor = ConsoleColor.White; // Reset color
         }
+        // Save file
+        try
+        {
+            Console.WriteLine("Saving data to file");
+            using (StreamWriter sw = new StreamWriter(SAVE_FILE_PATH))
+            {
+                sw.WriteLine($"{wins} {losses} {ties}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("No save data created.");
+        }
     }
 
     // Writes a single line to file given filepath, the player and computer's choice, and the result of the match
@@ -133,7 +179,7 @@ public class Program
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
     private static string GetPlayerChoice()
     {
-        Console.Write("Enter your choice (rock, paper, scissors, exit): ");
+        Console.Write("Enter your choice (rock, paper, scissors, load, exit): ");
         string input = Console.ReadLine() ?? "";
         return input.Trim().ToLower();
     }
