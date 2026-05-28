@@ -9,43 +9,44 @@ namespace RpsWorkshop;
 
 public class Program
 {
+    public enum Choice { Unknown, Rock, Paper, Scissors, Lizard, Spock }
     public static void Main()
     {
         Console.WriteLine("=== Rock Paper Scissors Lizard Spock ===");
         Console.WriteLine();
 
-        string playerChoice = GetPlayerChoice();
-        string computerChoice = GetComputerChoice();
+        Choice playerChoice = GetPlayerChoice();
+        Choice computerChoice = GetComputerChoice();
 
         Console.WriteLine();
         Console.WriteLine($"You played:      {playerChoice}");
         Console.WriteLine($"Computer played: {computerChoice}");
         Console.WriteLine();
 
-        string result = DetermineWinner(playerChoice, computerChoice);
+        String result = DetermineWinner(playerChoice, computerChoice);
         Console.WriteLine(result);
     }
 
     // Prompts the player and returns their choice as a lowercase string.
     // Note: no input validation yet. Garbage in = garbage out. (Hint, hint.)
-    private static string GetPlayerChoice()
+    private static Choice GetPlayerChoice()
     {
         Console.Write("Enter your choice (rock, paper, scissors, lizard, spock): ");
         string input = Console.ReadLine() ?? "";
-        return input.Trim().ToLower();
+        return inputToChoice(input.Trim().ToLower());
     }
 
     // Picks rock, paper, scissors, lizard, or spock at random for the computer.
-    private static string GetComputerChoice()
+    private static Choice GetComputerChoice()
     {
         string[] choices = { "rock", "paper", "scissors", "lizard", "spock" };
         Random random = new Random();
         int index = random.Next(choices.Length);
-        return choices[index];
+        return inputToChoice(choices[index]);
     }
 
     // Returns a string describing who won this round.
-    private static string DetermineWinner(string player, string computer)
+    private static string DetermineWinner(Choice player, Choice computer)
     {
         if (player == computer)
         {
@@ -53,12 +54,27 @@ public class Program
         }
 
         bool playerWins =
-            (player == "rock" && (computer == "scissors" || computer == "lizard")) ||
-            (player == "paper" && (computer == "rock" || computer == "spock")) ||
-            (player == "scissors" && (computer == "paper" || computer == "lizard")) ||
-            (player == "lizard" && (computer == "paper" || computer == "spock")) ||
-            (player == "spock" && (computer == "rock" || computer == "scissors"));
+            (player == Choice.Rock && (computer == Choice.Scissors || computer == Choice.Lizard)) ||
+            (player == Choice.Paper && (computer == Choice.Rock || computer == Choice.Spock)) ||
+            (player == Choice.Scissors && (computer == Choice.Paper || computer == Choice.Lizard)) ||
+            (player == Choice.Lizard && (computer == Choice.Paper || computer == Choice.Spock)) ||
+            (player == Choice.Spock && (computer == Choice.Rock || computer == Choice.Scissors));
 
         return playerWins ? "You win!" : "Computer wins!";
+    }
+    
+    public static Choice inputToChoice(String input)
+    {
+        Choice choice = input switch
+        {
+            "rock" => Choice.Rock,
+            "paper" => Choice.Paper,
+            "scissors" => Choice.Scissors,
+            "lizard" => Choice.Lizard,
+            "spock" => Choice.Spock,
+            _ => Choice.Unknown
+        };
+
+        return choice;
     }
 }
